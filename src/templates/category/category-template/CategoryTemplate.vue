@@ -1,0 +1,683 @@
+<script setup>
+import { computed, ref, watch } from 'vue'
+import ContactSection from '../../main/ContactSection.vue'
+import SiteFooter from '../../../components/shared/SiteFooter.vue'
+import SiteHeader from '../../../components/shared/SiteHeader.vue'
+import productImageUrl from '../../../assets/product-page/product-jpg.jpg'
+
+const categoryOptions = [
+  { label: 'Цветочные арки', value: 'all' },
+  { label: 'Арки', value: 'arches' },
+  { label: 'Фотозоны', value: 'photozones' },
+  { label: 'Декор столов', value: 'table-decor' },
+]
+
+const products = [
+  {
+    id: 'a023',
+    article: 'A023',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '20%',
+    popularity: 98,
+    href: '/product',
+  },
+  {
+    id: 'a024',
+    article: 'A024',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 94,
+    href: '/product',
+  },
+  {
+    id: 'a025',
+    article: 'A025',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 90,
+    href: '/product',
+  },
+  {
+    id: 'a026',
+    article: 'A026',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: 'Хит сезона',
+    popularity: 96,
+    href: '/product',
+  },
+  {
+    id: 'a027',
+    article: 'A027',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 84,
+    href: '/product',
+  },
+  {
+    id: 'a028',
+    article: 'A028',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 82,
+    href: '/product',
+  },
+  {
+    id: 'a029',
+    article: 'A029',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'photozones',
+    size: '200cm x 230cm',
+    price: 349,
+    oldPrice: 470,
+    badge: '',
+    popularity: 80,
+    href: '/product',
+  },
+  {
+    id: 'a030',
+    article: 'A030',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'table-decor',
+    size: '60cm x 90cm',
+    price: 129,
+    oldPrice: 180,
+    badge: '',
+    popularity: 76,
+    href: '/product',
+  },
+  {
+    id: 'a031',
+    article: 'A031',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 74,
+    href: '/product',
+  },
+  {
+    id: 'a032',
+    article: 'A032',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 72,
+    href: '/product',
+  },
+  {
+    id: 'a033',
+    article: 'A033',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 70,
+    href: '/product',
+  },
+  {
+    id: 'a034',
+    article: 'A034',
+    title: 'Каркасная LED арка 1.8 м',
+    category: 'arches',
+    size: '180cm x 220cm',
+    price: 339,
+    oldPrice: 450,
+    badge: '',
+    popularity: 68,
+    href: '/product',
+  },
+]
+
+const selectedCategory = ref('all')
+const sortMode = ref('popular')
+const visibleLimit = ref(8)
+
+const toggleSort = () => {
+  sortMode.value = sortMode.value === 'popular' ? 'price-asc' : 'popular'
+}
+
+const sortedProducts = computed(() => {
+  const productsCopy = [...products]
+
+  if (sortMode.value === 'price-asc') {
+    return productsCopy.sort((first, second) => first.price - second.price)
+  }
+
+  return productsCopy.sort((first, second) => second.popularity - first.popularity)
+})
+
+const filteredProducts = computed(() => sortedProducts.value.filter((product) => (
+  selectedCategory.value === 'all' || product.category === selectedCategory.value
+)))
+
+const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleLimit.value))
+const hasMoreProducts = computed(() => visibleProducts.value.length < filteredProducts.value.length)
+
+const showMoreProducts = () => {
+  visibleLimit.value += 8
+}
+
+watch([selectedCategory, sortMode], () => {
+  visibleLimit.value = 8
+})
+
+const setCategory = (value) => {
+  selectedCategory.value = value
+  visibleLimit.value = 8
+}
+
+const resetFilters = () => {
+  selectedCategory.value = 'all'
+  visibleLimit.value = 8
+}
+</script>
+
+<template>
+  <div class="catalog-page">
+    <SiteHeader />
+
+    <main class="catalog-main">
+      <section class="catalog-template">
+        <p class="catalog-eyebrow">#Каталог</p>
+        <h1 class="catalog-title">Аренда декора</h1>
+
+        <div class="catalog-layout">
+          <aside class="catalog-sidebar" aria-label="Фильтры каталога">
+            <div class="catalog-sidebar-block">
+              <h2>Тип декора</h2>
+              <div class="catalog-sidebar-options">
+                <button
+                  v-for="option in categoryOptions"
+                  :key="option.value"
+                  type="button"
+                  class="catalog-sidebar-option"
+                  :class="{ 'is-active': selectedCategory === option.value }"
+                  :data-filter-value="option.value"
+                  @click="setCategory(option.value)"
+                >
+                  {{ option.label }}
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="catalog-reset-button" @click="resetFilters">
+              Сбросить фильтры
+            </button>
+            <button
+              type="button"
+              class="catalog-sidebar-sort-button"
+              :aria-label="sortMode === 'popular' ? 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ С†РµРЅРµ' : 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РїРѕРїСѓР»СЏСЂРЅРѕСЃС‚Рё'"
+              data-catalog-sort-sidebar
+              @click="toggleSort"
+            >
+              <span>{{ sortMode === 'popular' ? 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ С†РµРЅРµ' : 'РџРѕ РїРѕРїСѓР»СЏСЂРЅРѕСЃС‚Рё' }}</span>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M5 3V15M5 15L2.5 12.5M5 15L7.5 12.5M13 15V3M13 3L10.5 5.5M13 3L15.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </aside>
+
+          <div class="catalog-content">
+        <div class="catalog-toolbar">
+          <label class="catalog-select-wrap">
+            <span class="sr-only">Категория</span>
+            <select
+              v-model="selectedCategory"
+              class="catalog-select"
+              data-catalog-filter="category"
+            >
+              <option
+                v-for="option in categoryOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            class="catalog-sort-button"
+            :aria-label="sortMode === 'popular' ? 'Сортировать по цене' : 'Сортировать по популярности'"
+            data-catalog-sort
+            @click="toggleSort"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5 3V15M5 15L2.5 12.5M5 15L7.5 12.5M13 15V3M13 3L10.5 5.5M13 3L15.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="catalog-grid">
+          <article
+            v-for="product in visibleProducts"
+            :key="product.id"
+            class="catalog-card"
+            :class="[`category-${product.category}`]"
+            :data-product-id="product.id"
+            :data-category="product.category"
+            :data-price="product.price"
+            :data-popularity="product.popularity"
+          >
+            <a :href="product.href" class="catalog-card-image-link" :aria-label="product.title">
+              <img :src="productImageUrl" :alt="product.title" class="catalog-card-image" />
+              <span v-if="product.badge" class="catalog-card-badge">{{ product.badge }}</span>
+            </a>
+
+            <div class="catalog-card-body">
+              <p class="catalog-card-meta">{{ product.article }} - {{ product.size }}</p>
+              <h2 class="catalog-card-title">
+                <a :href="product.href">{{ product.title }}</a>
+              </h2>
+
+              <div class="catalog-card-footer">
+                <p class="catalog-price">
+                  {{ product.price }}€
+                  <span>{{ product.oldPrice }}€</span>
+                </p>
+
+                <a :href="product.href" class="catalog-card-link" :aria-label="`Перейти в товар ${product.title}`">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M4 7.5H11M8.25 4.75L11 7.5L8.25 10.25" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <button
+          v-if="hasMoreProducts"
+          type="button"
+          class="catalog-more-button"
+          @click="showMoreProducts"
+        >
+          Показать еще
+        </button>
+          </div>
+        </div>
+
+      </section>
+
+      <ContactSection
+        title="Хотите оформить своё мероприятие?"
+        description="Оставьте заявку, и мы подберём идеальное оформление под ваш стиль и площадку."
+      />
+    </main>
+
+    <SiteFooter />
+  </div>
+</template>
+
+<style scoped>
+.catalog-page {
+  min-height: 100vh;
+  background: #FDF9F6;
+  color: var(--color-text);
+}
+
+.catalog-main {
+  padding: 22px 0 0;
+}
+
+.catalog-template {
+  width: min(100% - 32px, 390px);
+  margin: 0 auto;
+}
+
+.catalog-eyebrow {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0;
+  color: var(--color-heading);
+  text-transform: uppercase;
+}
+
+.catalog-title {
+  margin: 10px 0 0;
+  font-family: var(--font-display);
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 35px;
+  letter-spacing: 0;
+  color: var(--color-heading);
+}
+
+.catalog-layout {
+  margin-top: 18px;
+}
+
+.catalog-sidebar {
+  display: none;
+}
+
+.catalog-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.catalog-select-wrap {
+  position: relative;
+  display: block;
+}
+
+.catalog-select {
+  width: 100%;
+  height: 34px;
+  padding: 0 34px 0 13px;
+  border: 1px solid rgba(34, 17, 46, 0.14);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-heading);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 16px;
+  outline: none;
+}
+
+.catalog-sort-button {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(34, 17, 46, 0.14);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-heading);
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 20px;
+  margin-top: 16px;
+}
+
+.catalog-card {
+  min-width: 0;
+}
+
+.catalog-card-image-link {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 4px solid #fff;
+  border-radius: 6px;
+  background: #eee8e2;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.12);
+}
+
+.catalog-card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 160 / 166;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.catalog-card-badge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-width: 42px;
+  padding: 5px 7px 4px;
+  background: #2e1742;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 10px;
+  text-transform: uppercase;
+}
+
+.catalog-card-body {
+  padding-top: 5px;
+}
+
+.catalog-card-meta {
+  margin: 0;
+  color: #817C84;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 16px;
+}
+
+.catalog-card-title {
+  min-height: 28px;
+  margin: 1px 0 0;
+  color: #22112E;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+}
+
+.catalog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.catalog-price {
+  margin: 0;
+  color: #22112E;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: normal;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.catalog-price span {
+  margin-left: 0;
+  color: #817C84;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 14px;
+  text-decoration-line: line-through;
+}
+
+.catalog-card-link {
+  display: inline-flex;
+  width: 70px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 27px;
+  background: #E93C60;
+  color: #fff;
+}
+
+.catalog-more-button {
+  display: flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 26px;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 11px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+@media (min-width: 700px) {
+  .catalog-template {
+    width: min(100% - 48px, 760px);
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .catalog-template {
+    width: min(100% - 64px, 1120px);
+  }
+
+  .catalog-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    margin-top: 24px;
+  }
+
+  .catalog-sidebar {
+    display: block;
+    padding: 20px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 44px rgba(34, 17, 46, 0.07);
+  }
+
+  .catalog-sidebar-block h2 {
+    margin: 0;
+    color: var(--color-heading);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+
+  .catalog-sidebar-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+  }
+
+  .catalog-sidebar-option {
+    min-height: 36px;
+    padding: 0 16px;
+    border: 1px solid rgba(34, 17, 46, 0.13);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--color-heading);
+    font-size: 13px;
+    line-height: 18px;
+    transition: 0.2s ease;
+  }
+
+  .catalog-sidebar-option:hover,
+  .catalog-sidebar-option.is-active {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .catalog-reset-button,
+  .catalog-sidebar-sort-button {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid rgba(34, 17, 46, 0.14);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-heading);
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: uppercase;
+  }
+
+  .catalog-reset-button {
+    margin-top: 24px;
+  }
+
+  .catalog-sidebar-sort-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 0 16px;
+    text-align: left;
+  }
+
+  .catalog-toolbar {
+    display: none;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  .catalog-card-meta {
+    color: #817C84;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 16px;
+  }
+
+  .catalog-card-title {
+    color: #22112E;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+
+  .catalog-price {
+    color: #22112E;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+@media (min-width: 1240px) {
+  .catalog-template {
+    width: min(100% - 80px, 1240px);
+  }
+}
+</style>

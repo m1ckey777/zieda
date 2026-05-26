@@ -6,20 +6,21 @@ import phoneIconUrl from '../../assets/header-phone.svg'
 import UiButton from './UiButton.vue'
 
 const desktopNavItems = [
-  { label: 'Услуги', href: '#services' },
+  { label: 'Услуги', href: '/#services' },
+  { label: 'Каталог', href: '/catalog' },
   { label: 'Портфолио', href: '/portfolio' },
-  { label: 'О нас', href: '#about' },
-  { label: 'Контакты', href: '#contact' },
+  { label: 'О нас', href: '/#about' },
+  { label: 'Контакты', href: '/#contact' },
 ]
 
 const mobileNavItems = [
-  { label: 'О нас', href: '#about' },
-  { label: 'Мы предлагаем', href: '#services' },
-  { label: 'Каталог декора', href: '#services' },
-  { label: 'Для B2B', href: '#contact' },
+  { label: 'О нас', href: '/#about' },
+  { label: 'Мы предлагаем', href: '/#services' },
+  { label: 'Каталог декора', href: '/catalog' },
+  { label: 'Для B2B', href: '/b2b-partnership' },
   { label: 'Портфолио', href: '/portfolio' },
-  { label: 'Отзывы', href: '#contact' },
-  { label: 'Контакты', href: '#contact' },
+  { label: 'Отзывы', href: '/#contact' },
+  { label: 'Контакты', href: '/#contact' },
 ]
 
 const languages = ['Lv', 'Ru']
@@ -165,13 +166,13 @@ onBeforeUnmount(() => {
               </transition>
             </div>
 
-            <a
+            <!-- <a
               href="#"
               class="inline-flex h-6 w-6 items-center justify-center text-[var(--color-primary)] transition-transform duration-200 hover:scale-105"
               aria-label="Корзина"
             >
               <img :src="cartIconUrl" alt="" class="block h-6 w-6" />
-            </a>
+            </a> -->
             <a
               href="tel:+37100000000"
               class="inline-flex h-6 w-6 items-center justify-center text-[var(--color-primary)] transition-transform duration-200 hover:scale-105"
@@ -181,7 +182,7 @@ onBeforeUnmount(() => {
             </a>
 
             <div class="max-[980px]:hidden">
-              <UiButton label="Каталог декора" href="#services" />
+              <UiButton label="Каталог декора" href="/catalog" />
             </div>
 
             <button

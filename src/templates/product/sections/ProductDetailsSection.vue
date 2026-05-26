@@ -73,7 +73,7 @@ const selectColor = (colorKey) => {
 </script>
 
 <template>
-  <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[64px] pb-[150px] max-[768px]:w-full max-[768px]:px-[22px] max-[768px]:pt-[34px] max-[768px]:pb-[150px]">
+  <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[64px] pb-[150px] max-[768px]:w-full max-[768px]:px-[22px] max-[768px]:pt-[34px] max-[768px]:pb-[80px]">
     <div class="grid items-start gap-[36px] min-[1100px]:grid-cols-[minmax(0,780px)_390px] max-[1099px]:gap-[40px]">
       <div>
         <div class="max-[768px]:mb-[12px]">
@@ -81,7 +81,7 @@ const selectColor = (colorKey) => {
             Цветочные арки
           </p>
 
-          <h1 class="mt-4 text-[56px] font-normal leading-[64px] tracking-[-1.44px] text-[#22112E] [font-family:var(--font-display)] max-[1024px]:text-[46px] max-[1024px]:leading-[54px] max-[768px]:mt-[10px] max-[768px]:max-w-full max-[768px]:text-[44px] max-[768px]:leading-[52px] max-[768px]:tracking-[-0.7px]">
+          <h1 class="mt-4 text-[56px] font-normal leading-[64px] tracking-[-1.44px] text-[#22112E] [font-family:var(--font-display)] max-[1024px]:text-[46px] max-[1024px]:leading-[54px] max-[768px]:mt-[10px] max-[768px]:max-w-full max-[768px]:text-[34px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
             Каркасная арка White Elegance PBR22
           </h1>
 
@@ -98,7 +98,7 @@ const selectColor = (colorKey) => {
           <img
             :src="activeGallery[currentSlideIndex].image"
             :alt="activeGallery[currentSlideIndex].alt"
-            class="block aspect-[1/1.05] w-full object-cover max-[768px]:aspect-[1/1.36]"
+            class="block aspect-[1/1.05] w-full object-cover max-[768px]:aspect-[1/1.2]"
           />
 
           <button
@@ -140,7 +140,7 @@ const selectColor = (colorKey) => {
       </div>
 
       <div class="min-[1100px]:pt-[8px]">
-        <div class="mt-8 max-[768px]:mt-9">
+        <div class="mt-8 max-[768px]:mt-0">
           <h2 class="m-0 max-w-[430px] text-[32px] font-normal leading-[40px] tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)] max-[768px]:max-w-full max-[768px]:text-[24px] max-[768px]:leading-[32px]">
             Рекомендованные варианты использования
           </h2>
@@ -190,11 +190,11 @@ const selectColor = (colorKey) => {
 
     <div class="mt-12 rounded-[40px] border-[4px] max-w-[910px] border-white bg-[#22112E] px-[22px] py-[24px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mt-10 max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
       <div class="relative z-10 mb-[18px]">
-        <h2 class="m-0 max-w-[760px] [font-family:var(--font-display)] text-[44px] font-normal leading-[48px] tracking-[-0.7px] text-white max-[768px]:max-w-[240px] max-[768px]:text-[32px] max-[768px]:leading-[36px]">
+        <h2 class="m-0 max-w-[760px] [font-family:var(--font-display)] text-[44px] font-normal leading-[48px] tracking-[-0.7px] text-white max-[768px]:max-w-[100%] max-[768px]:text-[32px] max-[768px]:leading-[36px]">
           Хотите оформить своё мероприятие?
         </h2>
 
-        <p class="mt-3 max-w-[760px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-white/80 max-[768px]:mt-3 max-[768px]:max-w-[240px] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
+        <p class="mt-3 max-w-[760px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-white/80 max-[768px]:mt-3 max-[768px]:max-w-[100%] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
           Оставьте заявку, и мы подберём идеальное оформление под ваш стиль и площадку.
         </p>
       </div>
@@ -232,7 +232,7 @@ const selectColor = (colorKey) => {
       </p>
     </div>
 
-    <div class="fixed inset-x-0 bottom-0 z-40 bg-transparent px-[18px] pb-[18px] min-[769px]:hidden">
+    <!-- <div class="fixed inset-x-0 bottom-0 z-40 bg-transparent px-[18px] pb-[18px] min-[769px]:hidden">
       <div class="flex items-center gap-[10px] rounded-[40px] bg-[var(--color-primary)] p-[10px] shadow-[0_24px_60px_rgba(34,17,46,0.22)]">
         <div class="flex min-h-[68px] min-w-[120px] items-center justify-center rounded-[555px] bg-[var(--color-primary)] [font-family:var(--font-display)] text-[28px] font-normal leading-[30px] tracking-[-0.7px] text-white">
           350€
@@ -250,6 +250,6 @@ const selectColor = (colorKey) => {
           Добавить в заказ
         </button>
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
