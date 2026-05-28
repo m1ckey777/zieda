@@ -1,33 +1,17 @@
 ﻿<script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import cartIconUrl from '../../assets/header-cart.svg'
 import logoUrl from '../../assets/logo.svg'
 import phoneIconUrl from '../../assets/header-phone.svg'
+import { useLanguage } from '../../composables/useLanguage'
 import UiButton from './UiButton.vue'
 
-const desktopNavItems = [
-  { label: 'Услуги', href: '/#services' },
-  { label: 'Каталог', href: '/catalog' },
-  { label: 'Портфолио', href: '/portfolio' },
-  { label: 'О нас', href: '/#about' },
-  { label: 'Контакты', href: '/#contact' },
-]
-
-const mobileNavItems = [
-  { label: 'О нас', href: '/#about' },
-  { label: 'Мы предлагаем', href: '/#services' },
-  { label: 'Каталог декора', href: '/catalog' },
-  { label: 'Для B2B', href: '/b2b-partnership' },
-  { label: 'Портфолио', href: '/portfolio' },
-  { label: 'Отзывы', href: '/#contact' },
-  { label: 'Контакты', href: '/#contact' },
-]
-
-const languages = ['Lv', 'Ru']
+const { currentLanguage, languages, setLanguage, t } = useLanguage()
+const desktopNavItems = computed(() => t.value.header.desktopNav)
+const mobileNavItems = computed(() => t.value.header.mobileNav)
 
 const isMobileMenuOpen = ref(false)
 const isLanguageMenuOpen = ref(false)
-const activeLanguage = ref('Lv')
 const headerRef = ref(null)
 const languageMenuRef = ref(null)
 
@@ -48,7 +32,7 @@ const toggleLanguageMenu = () => {
 }
 
 const selectLanguage = (language) => {
-  activeLanguage.value = language
+  setLanguage(language)
   isLanguageMenuOpen.value = false
 }
 
@@ -107,7 +91,7 @@ onBeforeUnmount(() => {
             <img :src="logoUrl" alt="Zida Ziedi" class="block h-auto w-[178px] max-[768px]:w-[120px]" />
           </a>
 
-          <nav class="flex items-center gap-8 max-[980px]:hidden" aria-label="Основная навигация">
+          <nav class="flex items-center gap-8 max-[980px]:hidden" :aria-label="t.header.navAria">
             <a
               v-for="item in desktopNavItems"
               :key="item.label"
@@ -127,7 +111,7 @@ onBeforeUnmount(() => {
                 :aria-expanded="isLanguageMenuOpen"
                 @click.stop="toggleLanguageMenu"
               >
-                <span>{{ activeLanguage }}</span>
+                <span>{{ currentLanguage }}</span>
                 <svg
                   class="h-3.5 w-3.5 transition-transform duration-200"
                   :class="{ 'rotate-180': isLanguageMenuOpen }"
@@ -156,7 +140,7 @@ onBeforeUnmount(() => {
                   v-for="language in languages"
                   :key="language"
                   class="flex w-full items-center justify-center py-2 text-center font-[var(--font-display)] text-[14px] transition-colors duration-200 hover:text-[var(--color-primary)]"
-                  :class="activeLanguage === language ? 'text-[var(--color-primary)] underline underline-offset-[5px]' : 'text-[var(--color-heading)]'"
+                  :class="currentLanguage === language ? 'text-[var(--color-primary)] underline underline-offset-[5px]' : 'text-[var(--color-heading)]'"
                   type="button"
                   @click="selectLanguage(language)"
                 >
@@ -176,13 +160,13 @@ onBeforeUnmount(() => {
             <a
               href="tel:+37100000000"
               class="inline-flex h-6 w-6 items-center justify-center text-[var(--color-primary)] transition-transform duration-200 hover:scale-105"
-              aria-label="Позвонить"
+              :aria-label="t.header.callAria"
             >
               <img :src="phoneIconUrl" alt="" class="block h-6 w-6" />
             </a>
 
             <div class="max-[980px]:hidden">
-              <UiButton label="Каталог декора" href="/catalog" />
+              <UiButton :label="t.header.catalogCta" href="/catalog" />
             </div>
 
             <button
@@ -190,7 +174,7 @@ onBeforeUnmount(() => {
               type="button"
               :aria-expanded="isMobileMenuOpen"
               aria-controls="mobile-site-menu"
-              :aria-label="isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'"
+              :aria-label="isMobileMenuOpen ? t.header.closeMenu : t.header.openMenu"
               @click.stop="toggleMobileMenu"
             >
               <svg
@@ -232,7 +216,7 @@ onBeforeUnmount(() => {
             class="absolute left-0 right-0 top-0 z-[1] rounded-[28px] bg-white shadow-[0_22px_70px_rgba(34,17,46,0.16)] min-[981px]:hidden"
           >
             <div class="px-[22px] pb-8 pt-[84px] max-[768px]:px-[22px] max-[768px]:pb-8 max-[768px]:pt-[76px]">
-              <nav class="flex flex-col gap-[30px]" aria-label="Мобильная навигация">
+              <nav class="flex flex-col gap-[30px]" :aria-label="t.header.mobileNavAria">
                 <a
                   v-for="item in mobileNavItems"
                   :key="item.label"
@@ -246,13 +230,13 @@ onBeforeUnmount(() => {
 
               <div class="mt-10 rounded-[22px] bg-[#F6F6F6] p-2.5">
                 <div class="flex items-center justify-between gap-3">
-                  <span class="pl-3 font-[var(--font-display)] text-[16px] font-normal leading-none text-[#262626]">Выбрать язык</span>
+                  <span class="pl-3 font-[var(--font-display)] text-[16px] font-normal leading-none text-[#262626]">{{ t.header.languageLabel }}</span>
                   <div class="flex items-center gap-[10px]">
                     <button
                       v-for="language in languages"
                       :key="language"
                       class="flex h-[42px] w-[60px] items-center justify-center rounded-full font-[var(--font-display)] text-[15px] font-normal leading-none transition-colors duration-200"
-                      :class="activeLanguage === language ? 'bg-[var(--color-footer)] text-white' : 'bg-white text-[var(--color-footer)]'"
+                      :class="currentLanguage === language ? 'bg-[var(--color-footer)] text-white' : 'bg-white text-[var(--color-footer)]'"
                       type="button"
                       @click="selectLanguage(language)"
                     >
@@ -264,7 +248,7 @@ onBeforeUnmount(() => {
 
               <div class="mt-4 rounded-[22px] bg-[#F6F6F6] p-2.5">
                 <div class="flex items-center justify-between gap-3">
-                  <span class="pl-3 font-[var(--font-display)] text-[16px] font-normal leading-none text-[#262626]">Соцсети</span>
+                  <span class="pl-3 font-[var(--font-display)] text-[16px] font-normal leading-none text-[#262626]">{{ t.header.socialLabel }}</span>
                   <div class="flex items-center gap-2">
                     <a
                       href="#"

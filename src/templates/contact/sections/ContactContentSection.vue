@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import intlTelInput from 'intl-tel-input'
 import 'intl-tel-input/styles'
 import mailIconUrl from '../../../assets/contact-page/mail-ic.svg'
@@ -8,7 +8,9 @@ import pinIconUrl from '../../../assets/contact-page/pin-ic.svg'
 import socialFacebookIconUrl from '../../../assets/contact-page/soc-ic-1.svg'
 import socialInstagramIconUrl from '../../../assets/contact-page/soc-ic-2.svg'
 import socialYoutubeIconUrl from '../../../assets/contact-page/soc-ic-3.svg'
+import { useLanguage } from '../../../composables/useLanguage'
 
+const { t } = useLanguage()
 const city = ref('')
 const service = ref('')
 const contactName = ref('')
@@ -17,8 +19,8 @@ const phoneInputRef = ref(null)
 const contactPhone = ref('')
 const isSubmitted = ref(false)
 
-const cityOptions = ['Рига', 'Юрмала', 'Лиепая', 'Даугавпилс']
-const serviceOptions = ['Оформление свадеб', 'Корпоративы', 'Фотозоны', 'Аренда декора']
+const cityOptions = computed(() => t.value.contacts.cityOptions)
+const serviceOptions = computed(() => t.value.contacts.serviceOptions)
 
 const socialLinks = [
   { key: 'facebook', href: '#', label: 'Facebook', icon: socialFacebookIconUrl },
@@ -90,15 +92,15 @@ onBeforeUnmount(() => {
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[80px] pb-[110px] max-[768px]:w-full max-[768px]:px-[15px] max-[768px]:pt-[38px] max-[768px]:pb-[45px]">
     <div class="max-w-[680px] max-[768px]:max-w-none">
       <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
-        #Обсудим
+        {{ t.contacts.eyebrow }}
       </p>
 
       <h1 class="mt-4 text-[56px] font-normal leading-[64px] tracking-[-1.44px] text-[#22112E] [font-family:var(--font-display)] max-[1024px]:text-[48px] max-[1024px]:leading-[56px] max-[768px]:mt-[10px] max-[768px]:text-[44px] max-[768px]:leading-[52px] max-[768px]:tracking-[-0.7px]">
-        Контактная информация
+        {{ t.contacts.title }}
       </h1>
 
       <p class="mt-5 max-w-[620px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-[10px] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-        Вы можете связаться с нами любым удобным для вас способом или оставить заявку через форму ниже — мы свяжемся с вами в ближайшее время.
+        {{ t.contacts.text }}
       </p>
     </div>
 
@@ -109,11 +111,11 @@ onBeforeUnmount(() => {
           class="rounded-[40px] border-[4px] border-white bg-[var(--color-primary)] px-[44px] py-[42px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mb-[38px] max-[768px]:rounded-[40px] max-[768px]:px-[22px] max-[768px]:py-[30px]"
         >
           <h2 class="m-0 [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-white max-[768px]:text-[32px] max-[768px]:leading-[40px]">
-            Спасибо!
+            {{ t.contacts.successTitle }}
           </h2>
 
           <p class="mt-6 max-w-[520px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-white max-[768px]:mt-5 max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-            Благодарим Вас за обращение! Мы уже получили ваше сообщение и в скором времени свяжемся по указанным вами контактам.
+            {{ t.contacts.successText }}
           </p>
 
           <button
@@ -121,7 +123,7 @@ onBeforeUnmount(() => {
             class="mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
             @click="resetForm"
           >
-            Отправить еще
+            {{ t.contacts.sendAgain }}
           </button>
         </div>
 
@@ -132,24 +134,24 @@ onBeforeUnmount(() => {
         >
           <div class="grid gap-5">
             <label class="block">
-              <span class="sr-only">Ваше имя</span>
+              <span class="sr-only">{{ t.contacts.name }}</span>
               <input
                 v-model="contactName"
                 type="text"
                 name="name"
-                placeholder="Ваше имя"
+                :placeholder="t.contacts.name"
                 class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
               />
             </label>
 
             <label class="relative block">
-              <span class="sr-only">Город</span>
+              <span class="sr-only">{{ t.contacts.city }}</span>
               <select
                 v-model="city"
                 name="city"
                 class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
               >
-                <option value="" disabled>Город</option>
+                <option value="" disabled>{{ t.contacts.city }}</option>
                 <option v-for="option in cityOptions" :key="option" :value="option">{{ option }}</option>
               </select>
               <span class="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-[#22112E]">
@@ -160,13 +162,13 @@ onBeforeUnmount(() => {
             </label>
 
             <label class="relative block">
-              <span class="sr-only">Выбрать услугу</span>
+              <span class="sr-only">{{ t.contacts.service }}</span>
               <select
                 v-model="service"
                 name="service"
                 class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
               >
-                <option value="" disabled>Выбрать услугу</option>
+                <option value="" disabled>{{ t.contacts.service }}</option>
                 <option v-for="option in serviceOptions" :key="option" :value="option">{{ option }}</option>
               </select>
               <span class="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-[#22112E]">
@@ -177,7 +179,7 @@ onBeforeUnmount(() => {
             </label>
 
             <label class="block">
-              <span class="sr-only">Ваш телефон</span>
+              <span class="sr-only">{{ t.contacts.phone }}</span>
               <input
                 ref="phoneInputRef"
                 type="tel"
@@ -187,11 +189,11 @@ onBeforeUnmount(() => {
             </label>
 
             <label class="block">
-              <span class="sr-only">Сообщение</span>
+              <span class="sr-only">{{ t.contacts.message }}</span>
               <textarea
                 v-model="contactMessage"
                 name="message"
-                placeholder="Сообщение"
+                :placeholder="t.contacts.message"
                 rows="6"
                 class="min-h-[208px] w-full resize-none rounded-[32px] border-0 bg-white px-6 py-5 text-[16px] leading-[24px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:min-h-[178px]"
               />
@@ -202,11 +204,11 @@ onBeforeUnmount(() => {
             type="submit"
             class="mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
           >
-            Заказать оформление
+            {{ t.contacts.submit }}
           </button>
 
           <p class="mx-auto mt-6 max-w-[610px] text-center text-[11px] font-normal leading-[16px] tracking-[-0.22px] text-white max-[768px]:mt-[16px] max-[768px]:max-w-[330px] max-[768px]:text-[10px] max-[768px]:leading-[1.45]">
-            Nosūtot formu, jūs piekrītat, ka jūsu sniegtie dati tiks izmantoti saziņai un apstrādāti saskaņā ar Privātuma politiku.
+            {{ t.contacts.privacy }}
           </p>
         </form>
       </div>
@@ -216,7 +218,7 @@ onBeforeUnmount(() => {
           <div class="grid grid-cols-[72px_1fr] items-center gap-5 max-[768px]:grid-cols-[40px_1fr] max-[768px]:gap-4">
             <img :src="phoneIconUrl" alt="" class="w-[72px] max-[768px]:w-[40px]" />
             <div>
-              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">Звоните нам</p>
+              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">{{ t.contacts.callUs }}</p>
               <a href="tel:+37100000000" class="mt-2 block [font-family:var(--font-display)] text-[42px] font-normal leading-[44px] tracking-[-0.7px] text-white max-[768px]:mt-1 max-[768px]:text-[21px] max-[768px]:leading-[30px]">
                 +371 00 000 000
               </a>
@@ -226,7 +228,7 @@ onBeforeUnmount(() => {
           <div class="grid grid-cols-[72px_1fr] items-center gap-5 max-[768px]:grid-cols-[40px_1fr] max-[768px]:gap-4">
             <img :src="mailIconUrl" alt="" class="w-[72px] max-[768px]:w-[40px]" />
             <div>
-              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">Пишите нам</p>
+              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">{{ t.contacts.writeUs }}</p>
               <a href="mailto:info@zidaziedi.lv" class="mt-2 block [font-family:var(--font-display)] text-[42px] font-normal leading-[44px] tracking-[-0.7px] text-white max-[768px]:mt-1 max-[768px]:text-[21px] max-[768px]:leading-[30px]">
                 info@zidaziedi.lv
               </a>
@@ -236,7 +238,7 @@ onBeforeUnmount(() => {
           <div class="grid grid-cols-[72px_1fr] items-center gap-5 max-[768px]:grid-cols-[40px_1fr] max-[768px]:gap-4">
             <img :src="pinIconUrl" alt="" class="w-[72px] max-[768px]:w-[40px]" />
             <div>
-              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">Заходите к нам</p>
+              <p class="m-0 text-[18px] font-normal leading-[22px] text-white/80 max-[768px]:text-[16px]">{{ t.contacts.visitUs }}</p>
               <p class="mt-2 [font-family:var(--font-display)] text-[42px] font-normal leading-[44px] tracking-[-0.7px] text-white max-[768px]:mt-1 max-[768px]:text-[21px] max-[768px]:leading-[30px]">
                 Brivības iela 58
               </p>
@@ -246,7 +248,7 @@ onBeforeUnmount(() => {
 
         <div class="mt-10 flex items-center justify-between gap-5 rounded-[555px] bg-white px-[22px] py-[12px] max-[768px]:mt-8 max-[768px]:px-[18px] max-[768px]:py-[10px]">
           <span class="[font-family:var(--font-display)] text-[26px] font-normal leading-[30px] tracking-[-0.7px] text-[var(--color-footer)] max-[768px]:text-[18px] max-[768px]:leading-[22px]">
-            Мы в соцсетях
+            {{ t.contacts.socials }}
           </span>
 
           <div class="flex items-center gap-3 max-[768px]:gap-2">

@@ -1,16 +1,11 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useLanguage } from '../../../composables/useLanguage'
 
 const selectedGalleryImage = ref('')
 const activeFilter = ref('all')
 const visibleCount = ref(12)
-
-const filterOptions = [
-  { key: 'all', label: 'Все' },
-  { key: 'weddings', label: 'Свадьбы' },
-  { key: 'photozones', label: 'Фотозоны' },
-  { key: 'decor', label: 'Декор' },
-]
+const { t } = useLanguage()
 
 const categoriesByNumber = {
   11: ['photozones', 'decor'],
@@ -47,18 +42,20 @@ const imageEntries = Object.entries(
   }))
   .sort((a, b) => a.number - b.number)
 
-const portfolioItems = imageEntries.map(({ image, number }, index) => ({
-  id: `${number}-${index}`,
-  image,
-  number,
-  categories: categoriesByNumber[number] ?? ['decor'],
-  alt: `Портфолио Zida Ziedi ${index + 1}`,
-}))
+const portfolioItems = computed(() =>
+  imageEntries.map(({ image, number }, index) => ({
+    id: `${number}-${index}`,
+    image,
+    number,
+    categories: categoriesByNumber[number] ?? ['decor'],
+    alt: `${t.value.portfolio.imageAlt} ${index + 1}`,
+  })),
+)
 
 const filteredItems = computed(() => {
-  if (activeFilter.value === 'all') return portfolioItems
+  if (activeFilter.value === 'all') return portfolioItems.value
 
-  return portfolioItems.filter((item) => item.categories.includes(activeFilter.value))
+  return portfolioItems.value.filter((item) => item.categories.includes(activeFilter.value))
 })
 
 const visibleItems = computed(() => filteredItems.value.slice(0, visibleCount.value))
@@ -101,21 +98,21 @@ onBeforeUnmount(() => {
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[80px] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[45px] max-[768px]:pb-[65px]">
     <div class="max-w-[760px] max-[768px]:mx-auto max-[768px]:text-center">
       <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
-        #Наши работы
+        {{ t.portfolio.eyebrow }}
       </p>
 
       <h1 class="mt-4 text-[56px] font-normal leading-[64px] tracking-[-1.44px] text-[#22112E] [font-family:var(--font-display)] max-[1024px]:text-[48px] max-[1024px]:leading-[56px] max-[768px]:mt-[10px] max-[768px]:text-[44px] max-[768px]:leading-[52px] max-[768px]:tracking-[-0.7px]">
-        Портфолио
+        {{ t.portfolio.title }}
       </h1>
 
       <p class="mt-5 max-w-[600px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mx-auto max-[768px]:mt-4 max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-        Только реальные фотографии реализованных проектов.
+        {{ t.portfolio.text }}
       </p>
     </div>
 
     <div class="mt-10 flex flex-wrap gap-3 max-[768px]:mt-8 max-[768px]:flex-nowrap max-[768px]:overflow-x-auto max-[768px]:pb-3">
       <button
-        v-for="option in filterOptions"
+        v-for="option in t.portfolio.filters"
         :key="option.key"
         type="button"
         :data-filter="option.key"
@@ -138,7 +135,7 @@ onBeforeUnmount(() => {
           type="button"
           class="block w-full cursor-zoom-in transition duration-200 hover:opacity-95"
           @click="openGalleryImage(item.image)"
-          :aria-label="`Открыть изображение ${index + 1}`"
+          :aria-label="`${t.portfolio.openImage} ${index + 1}`"
         >
           <img
             :src="item.image"
@@ -156,7 +153,7 @@ onBeforeUnmount(() => {
         class="inline-flex min-h-[54px] items-center justify-center rounded-[555px] border border-[#22112E] bg-transparent px-[38px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] max-[768px]:w-full"
         @click="showMoreItems"
       >
-        Показать еще
+        {{ t.portfolio.showMore }}
       </button>
     </div>
   </section>
@@ -169,7 +166,7 @@ onBeforeUnmount(() => {
     <button
       type="button"
       class="absolute right-6 top-6 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/12 text-[30px] leading-none text-white transition duration-200 hover:bg-white/20 max-[768px]:right-4 max-[768px]:top-4"
-      aria-label="Закрыть изображение"
+      :aria-label="t.portfolio.closeImage"
       @click.stop="closeGalleryImage"
     >
       ×
@@ -177,7 +174,7 @@ onBeforeUnmount(() => {
 
     <img
       :src="selectedGalleryImage"
-      alt="Увеличенное изображение из портфолио"
+      :alt="t.portfolio.expandedAlt"
       class="max-h-[90vh] w-auto max-w-[min(100%,1100px)] rounded-[18px] object-contain shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
       @click.stop
     />

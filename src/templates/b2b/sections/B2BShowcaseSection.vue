@@ -1,39 +1,34 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import showcaseImage1Url from '../../../assets/b2b-showcase-1.jpg'
 import showcaseImage2Url from '../../../assets/b2b-showcase-2.jpg'
 import showcaseImage3Url from '../../../assets/b2b-showcase-3.jpg'
 import showcaseImage4Url from '../../../assets/b2b-showcase-4.jpg'
 import showcaseImage5Url from '../../../assets/b2b-showcase-5.jpg'
+import { useLanguage } from '../../../composables/useLanguage'
+
+const { t } = useLanguage()
+
+const showcaseImages = [
+  showcaseImage1Url,
+  showcaseImage2Url,
+  showcaseImage3Url,
+  showcaseImage4Url,
+  showcaseImage5Url,
+]
+
+const showcaseItems = computed(() =>
+  showcaseImages.map((image, index) => ({
+    image,
+    alt: t.value.b2b.showcase.imageAlts[index],
+  })),
+)
 
 const showcaseSliderRef = ref(null)
 const isShowcaseDragging = ref(false)
 let showcaseDragStartX = 0
 let showcaseStartScrollLeft = 0
 let activeShowcasePointerId = null
-
-const showcaseItems = [
-  {
-    image: showcaseImage1Url,
-    alt: 'Белая фотозона с мягким диваном и цветами',
-  },
-  {
-    image: showcaseImage2Url,
-    alt: 'Круглая декоративная арка с подвесными кристаллами',
-  },
-  {
-    image: showcaseImage3Url,
-    alt: 'Прозрачная свадебная табличка с белым декором',
-  },
-  {
-    image: showcaseImage4Url,
-    alt: 'Высокая белая инсталляция с тканями и цветами',
-  },
-  {
-    image: showcaseImage5Url,
-    alt: 'Приветственная свадебная табличка с белыми цветами',
-  },
-]
 
 const startShowcaseDrag = (event) => {
   if (!showcaseSliderRef.value) return
@@ -84,11 +79,11 @@ const endShowcaseDrag = (event) => {
   >
     <div class="w-full">
       <h2 class="m-0 max-w-[620px] [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[768px]:max-w-[320px] max-[768px]:text-[30px] max-[768px]:leading-[1.14]">
-        Декор, который говорит сам за себя
+        {{ t.b2b.showcase.title }}
       </h2>
 
       <p class="m-0 mt-[13px] max-w-[760px] font-[var(--font-sans)] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-3 max-[768px]:max-w-[355px] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-        Свадьбы, корпоративы, презентации, выставки и фотозоны — мы оформляем пространства любого масштаба.
+        {{ t.b2b.showcase.text }}
       </p>
 
       <div class="mt-[38px] max-[768px]:mt-[22px]">

@@ -4,19 +4,16 @@ import ContactSection from '../../main/ContactSection.vue'
 import SiteFooter from '../../../components/shared/SiteFooter.vue'
 import SiteHeader from '../../../components/shared/SiteHeader.vue'
 import productImageUrl from '../../../assets/product-page/product-jpg.jpg'
+import { useLanguage } from '../../../composables/useLanguage'
 
-const categoryOptions = [
-  { label: 'Цветочные арки', value: 'all' },
-  { label: 'Арки', value: 'arches' },
-  { label: 'Фотозоны', value: 'photozones' },
-  { label: 'Декор столов', value: 'table-decor' },
-]
+const { t } = useLanguage()
+const categoryOptions = computed(() => t.value.catalog.categories)
 
-const products = [
+const productItems = [
   {
     id: 'a023',
     article: 'A023',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -28,7 +25,7 @@ const products = [
   {
     id: 'a024',
     article: 'A024',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -40,7 +37,7 @@ const products = [
   {
     id: 'a025',
     article: 'A025',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -52,19 +49,19 @@ const products = [
   {
     id: 'a026',
     article: 'A026',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
     oldPrice: 450,
-    badge: 'Хит сезона',
+    badgeKey: 'hitSeason',
     popularity: 96,
     href: '/product',
   },
   {
     id: 'a027',
     article: 'A027',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -76,7 +73,7 @@ const products = [
   {
     id: 'a028',
     article: 'A028',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -88,7 +85,7 @@ const products = [
   {
     id: 'a029',
     article: 'A029',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'photozones',
     size: '200cm x 230cm',
     price: 349,
@@ -100,7 +97,7 @@ const products = [
   {
     id: 'a030',
     article: 'A030',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'table-decor',
     size: '60cm x 90cm',
     price: 129,
@@ -112,7 +109,7 @@ const products = [
   {
     id: 'a031',
     article: 'A031',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -124,7 +121,7 @@ const products = [
   {
     id: 'a032',
     article: 'A032',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -136,7 +133,7 @@ const products = [
   {
     id: 'a033',
     article: 'A033',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -148,7 +145,7 @@ const products = [
   {
     id: 'a034',
     article: 'A034',
-    title: 'Каркасная LED арка 1.8 м',
+    titleKey: 'ledArch18',
     category: 'arches',
     size: '180cm x 220cm',
     price: 339,
@@ -159,6 +156,14 @@ const products = [
   },
 ]
 
+const products = computed(() =>
+  productItems.map((product) => ({
+    ...product,
+    title: t.value.catalog.products[product.titleKey],
+    badge: product.badgeKey ? t.value.catalog.badges[product.badgeKey] : product.badge,
+  })),
+)
+
 const selectedCategory = ref('all')
 const sortMode = ref('popular')
 const visibleLimit = ref(8)
@@ -168,7 +173,7 @@ const toggleSort = () => {
 }
 
 const sortedProducts = computed(() => {
-  const productsCopy = [...products]
+  const productsCopy = [...products.value]
 
   if (sortMode.value === 'price-asc') {
     return productsCopy.sort((first, second) => first.price - second.price)
@@ -209,13 +214,13 @@ const resetFilters = () => {
 
     <main class="catalog-main">
       <section class="catalog-template">
-        <p class="catalog-eyebrow">#Каталог</p>
-        <h1 class="catalog-title">Аренда декора</h1>
+        <p class="catalog-eyebrow">{{ t.catalog.eyebrow }}</p>
+        <h1 class="catalog-title">{{ t.catalog.title }}</h1>
 
         <div class="catalog-layout">
-          <aside class="catalog-sidebar" aria-label="Фильтры каталога">
+          <aside class="catalog-sidebar" :aria-label="t.catalog.sidebarAria">
             <div class="catalog-sidebar-block">
-              <h2>Тип декора</h2>
+              <h2>{{ t.catalog.filterTitle }}</h2>
               <div class="catalog-sidebar-options">
                 <button
                   v-for="option in categoryOptions"
@@ -232,16 +237,16 @@ const resetFilters = () => {
             </div>
 
             <button type="button" class="catalog-reset-button" @click="resetFilters">
-              Сбросить фильтры
+              {{ t.catalog.reset }}
             </button>
             <button
               type="button"
               class="catalog-sidebar-sort-button"
-              :aria-label="sortMode === 'popular' ? 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ С†РµРЅРµ' : 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РїРѕРїСѓР»СЏСЂРЅРѕСЃС‚Рё'"
+              :aria-label="sortMode === 'popular' ? t.catalog.sortByPrice : t.catalog.sortByPopular"
               data-catalog-sort-sidebar
               @click="toggleSort"
             >
-              <span>{{ sortMode === 'popular' ? 'РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ С†РµРЅРµ' : 'РџРѕ РїРѕРїСѓР»СЏСЂРЅРѕСЃС‚Рё' }}</span>
+              <span>{{ sortMode === 'popular' ? t.catalog.sortByPrice : t.catalog.popular }}</span>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M5 3V15M5 15L2.5 12.5M5 15L7.5 12.5M13 15V3M13 3L10.5 5.5M13 3L15.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -251,7 +256,7 @@ const resetFilters = () => {
           <div class="catalog-content">
         <div class="catalog-toolbar">
           <label class="catalog-select-wrap">
-            <span class="sr-only">Категория</span>
+            <span class="sr-only">{{ t.catalog.categoryLabel }}</span>
             <select
               v-model="selectedCategory"
               class="catalog-select"
@@ -270,7 +275,7 @@ const resetFilters = () => {
           <button
             type="button"
             class="catalog-sort-button"
-            :aria-label="sortMode === 'popular' ? 'Сортировать по цене' : 'Сортировать по популярности'"
+            :aria-label="sortMode === 'popular' ? t.catalog.sortByPrice : t.catalog.sortByPopular"
             data-catalog-sort
             @click="toggleSort"
           >
@@ -308,7 +313,7 @@ const resetFilters = () => {
                   <span>{{ product.oldPrice }}€</span>
                 </p>
 
-                <a :href="product.href" class="catalog-card-link" :aria-label="`Перейти в товар ${product.title}`">
+                <a :href="product.href" class="catalog-card-link" :aria-label="`${t.catalog.productLink} ${product.title}`">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M4 7.5H11M8.25 4.75L11 7.5L8.25 10.25" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
@@ -324,7 +329,7 @@ const resetFilters = () => {
           class="catalog-more-button"
           @click="showMoreProducts"
         >
-          Показать еще
+          {{ t.catalog.showMore }}
         </button>
           </div>
         </div>
@@ -332,8 +337,8 @@ const resetFilters = () => {
       </section>
 
       <ContactSection
-        title="Хотите оформить своё мероприятие?"
-        description="Оставьте заявку, и мы подберём идеальное оформление под ваш стиль и площадку."
+        :title="t.catalog.contact.title"
+        :description="t.catalog.contact.description"
       />
     </main>
 

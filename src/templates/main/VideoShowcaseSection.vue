@@ -3,12 +3,14 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import pauseButtonIconUrl from '../../assets/pause-btn-ic.svg'
 import playButtonIconUrl from '../../assets/play-btn-ic.svg'
 import videoUrl from '../../assets/wedding-video.mp4'
+import { useLanguage } from '../../composables/useLanguage'
 
 const videoRef = ref(null)
 const isVideoPaused = ref(true)
 const isVideoHovered = ref(false)
 const canHover = ref(true)
 let hoverMediaQuery = null
+const { t } = useLanguage()
 
 const updateCanHover = (event) => {
   canHover.value = event?.matches ?? hoverMediaQuery?.matches ?? true
@@ -86,7 +88,7 @@ const toggleVideo = async () => {
         @click="toggleVideo"
         class="absolute left-1/2 top-1/2 inline-flex h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] max-[768px]:h-[72px] max-[768px]:w-[72px]"
         :class="isVideoControlVisible ? 'opacity-100' : 'pointer-events-none opacity-0'"
-        :aria-label="isVideoPaused ? 'Воспроизвести видео' : 'Поставить видео на паузу'"
+        :aria-label="isVideoPaused ? t.home.video.playAria : t.home.video.pauseAria"
       >
         <span class="relative inline-flex h-[58px] w-[58px] items-center justify-center max-[768px]:h-[20px] max-[768px]:w-[20px]">
           <img

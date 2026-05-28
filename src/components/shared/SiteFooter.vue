@@ -1,15 +1,8 @@
 ﻿<script setup>
 import logoUrl from '../../assets/logo.svg'
+import { useLanguage } from '../../composables/useLanguage'
 
-const serviceLinks = [
-  'Оформление свадеб',
-  'Корпоративы',
-  'Фотозоны',
-  'Цветочные арки',
-  'Аренда декора',
-]
-
-const companyLinks = ['О нас', 'Портфолио', 'Отзывы', 'Контакты', 'Terms & Conditions']
+const { t } = useLanguage()
 
 const phoneIcon = `
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
@@ -87,43 +80,43 @@ const socialLinks = [
             <img :src="logoUrl" alt="Zida Ziedi" class="block h-auto w-[136px] brightness-0 invert max-[768px]:w-[150px]" />
           </a>
           <p class="mt-[12px] max-w-[220px] text-[12px] font-normal leading-[16px] text-white/70 max-[768px]:mt-0 max-[768px]:max-w-[230px]  max-[768px]:leading-[20px]">
-            Идеальный декор для вашего особенного события
+            {{ t.footer.tagline }}
           </p>
         </div>
 
         <div class="w-[255px] shrink-0 max-[768px]:hidden">
           <div class="flex flex-col gap-[10px] max-[768px]:gap-[12px]">
-            <h3 class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:text-[18px] max-[768px]:font-semibold">Услуги</h3>
-            <a v-for="link in serviceLinks" :key="link" href="#services" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white max-[768px]:text-[16px] max-[768px]:leading-[1.9]">{{ link }}</a>
+            <h3 class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:text-[18px] max-[768px]:font-semibold">{{ t.footer.servicesTitle }}</h3>
+            <a v-for="link in t.footer.serviceLinks" :key="link" href="#services" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white max-[768px]:text-[16px] max-[768px]:leading-[1.9]">{{ link }}</a>
           </div>
         </div>
 
         <div class="w-[255px] shrink-0 max-[768px]:hidden">
           <div class="flex flex-col gap-[10px] max-[768px]:gap-[12px]">
-            <h3 class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:text-[18px] max-[768px]:font-semibold">Компания</h3>
-            <a v-for="link in companyLinks" :key="link" href="#" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white max-[768px]:text-[16px] max-[768px]:leading-[1.9]">{{ link }}</a>
+            <h3 class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:text-[18px] max-[768px]:font-semibold">{{ t.footer.companyTitle }}</h3>
+            <a v-for="link in t.footer.companyLinks" :key="link" href="#" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white max-[768px]:text-[16px] max-[768px]:leading-[1.9]">{{ link }}</a>
           </div>
         </div>
 
         <div class="hidden max-[768px]:mt-[34px] max-[768px]:grid max-[768px]:grid-cols-2 max-[768px]:gap-x-[14px]">
           <div class="min-w-0">
             <div class="flex flex-col gap-[12px]">
-              <h3 class="mb-[5px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white">Услуги</h3>
-              <a v-for="link in serviceLinks" :key="`mobile-${link}`" href="#services" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white">{{ link }}</a>
+              <h3 class="mb-[5px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white">{{ t.footer.servicesTitle }}</h3>
+              <a v-for="link in t.footer.serviceLinks" :key="`mobile-${link}`" href="#services" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white">{{ link }}</a>
             </div>
           </div>
 
           <div class="min-w-0">
             <div class="flex flex-col gap-[12px]">
-              <h3 class="mb-[5px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white">Компания</h3>
-              <a v-for="link in companyLinks" :key="`mobile-company-${link}`" href="#" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white">{{ link }}</a>
+              <h3 class="mb-[5px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white">{{ t.footer.companyTitle }}</h3>
+              <a v-for="link in t.footer.companyLinks" :key="`mobile-company-${link}`" href="#" class="text-[14px] font-normal leading-[20px] text-white/70 transition duration-200 hover:text-white">{{ link }}</a>
             </div>
           </div>
         </div>
 
         <div class="w-[255px] shrink-0 max-[768px]:mt-[34px] max-[768px]:w-full">
           <div class="flex flex-col gap-[10px] max-[768px]:gap-[14px]">
-            <div class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:hidden">Контакты</div>
+            <div class="mb-[16px] font-[var(--font-display)] text-[16px] font-normal leading-[24px] text-white max-[768px]:hidden">{{ t.footer.contactsTitle }}</div>
             <div class="flex flex-col gap-[10px] max-[768px]:flex-row max-[768px]:items-center max-[768px]:gap-6">
               <a href="tel:+37100000000" class="inline-flex items-center gap-[10px] whitespace-nowrap text-[16px] font-normal leading-[24px] text-white/70 transition duration-200 hover:text-white max-[768px]:font-[var(--font-body)] max-[768px]:text-[14px] max-[768px]:leading-[20px] max-[768px]:text-white/70">
                 <span class="inline-flex shrink-0" v-html="phoneIcon" />
@@ -151,10 +144,10 @@ const socialLinks = [
 
       <div class="mt-[60px] border-t border-white/10 pt-[12px] max-[768px]:mt-[18px] max-[768px]:border-t-0 max-[768px]:pt-[0]">
         <div class="flex items-center justify-between gap-6 text-[14px] font-normal leading-[20px] text-white/50 max-[768px]:flex-col max-[768px]:items-start max-[768px]:gap-[20px] max-[768px]:text-[14px] max-[768px]:leading-5">
-          <p class="m-0 order-1 max-[768px]:order-2">© 2025 Zida Ziedi. Все права защищены.</p>
+          <p class="m-0 order-1 max-[768px]:order-2">{{ t.footer.copyright }}</p>
           <div class="order-2 flex items-center gap-[40px] max-[768px]:order-1 max-[768px]:w-full max-[768px]:flex-row max-[768px]:items-center max-[768px]:justify-between max-[768px]:gap-4">
-            <a href="#" class="transition duration-200 hover:text-white">Условия использования</a>
-            <a href="#" class="transition duration-200 hover:text-white">Политика конфиденциальности</a>
+            <a href="#" class="transition duration-200 hover:text-white">{{ t.footer.terms }}</a>
+            <a href="#" class="transition duration-200 hover:text-white">{{ t.footer.privacy }}</a>
           </div>
         </div>
       </div>

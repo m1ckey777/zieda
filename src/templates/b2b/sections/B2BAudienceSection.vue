@@ -1,37 +1,30 @@
 <script setup>
+import { computed } from 'vue'
 import audienceImage1Url from '../../../assets/b2b-audience-1.jpg'
 import audienceImage2Url from '../../../assets/b2b-audience-2.jpg'
 import audienceImage3Url from '../../../assets/b2b-audience-3.jpg'
 import audienceImage4Url from '../../../assets/b2b-audience-4.jpg'
 import audienceImage5Url from '../../../assets/b2b-audience-5.jpg'
 import audienceImage6Url from '../../../assets/b2b-audience-6.jpg'
+import { useLanguage } from '../../../composables/useLanguage'
 
-const audienceCards = [
-  {
-    title: 'Event-агентства',
-    image: audienceImage1Url,
-  },
-  {
-    title: 'Банкетные залы',
-    image: audienceImage2Url,
-  },
-  {
-    title: 'Отели\nи конгресс-центры',
-    image: audienceImage3Url,
-  },
-  {
-    title: 'Рекламные\nи продакшн-агентства',
-    image: audienceImage4Url,
-  },
-  {
-    title: 'Фотостудии и площадки\nдля съемок',
-    image: audienceImage5Url,
-  },
-  {
-    title: 'Организаторы свадеб\nи частных праздников',
-    image: audienceImage6Url,
-  },
+const { t } = useLanguage()
+
+const audienceImages = [
+  audienceImage1Url,
+  audienceImage2Url,
+  audienceImage3Url,
+  audienceImage4Url,
+  audienceImage5Url,
+  audienceImage6Url,
 ]
+
+const audienceCards = computed(() =>
+  t.value.b2b.audience.cards.map((title, index) => ({
+    title,
+    image: audienceImages[index],
+  })),
+)
 </script>
 
 <template>
@@ -41,19 +34,20 @@ const audienceCards = [
   >
     <div class="mx-auto w-[min(1200px,calc(100%-40px))] max-[768px]:w-[min(1200px,calc(100%-32px))]">
       <p class="m-0 font-[var(--font-display)] text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[var(--color-heading)] max-[768px]:text-center">
-        #С КЕМ МЫ РАБОТАЕМ
+        {{ t.b2b.audience.eyebrow }}
       </p>
 
       <h2 class="m-0 mt-[8px] mb-[40px] max-w-[820px] [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[var(--color-heading)] max-[768px]:mx-auto max-[768px]:mt-[10px] max-[768px]:mb-[22px] max-[768px]:max-w-[340px] max-[768px]:text-center max-[768px]:text-[30px] max-[768px]:leading-[1.15] max-[768px]:tracking-[-0.5px]">
-        Мы работаем с профессионалами event-индустрии
+        {{ t.b2b.audience.title }}
       </h2>
 
-      <div class="max-w-[980px]  text-[16px] font-normal leading-[1.68] tracking-[-0.28px] text-[#5A5064] max-[768px]:mx-auto max-[768px]:max-w-[351px] max-[768px]:space-y-0 max-[768px]:text-center max-[768px]:text-[14px] max-[768px]:leading-[1.7]">
-        <p class=" ">
-          Мы работаем с теми, кому важно качество декора, стабильность и предсказуемый результат.
-        </p>
-        <p class=" ">
-          Мы берём на себя оформление, чтобы вы могли сосредоточиться на организации и работе с клиентом.
+      <div class="max-w-[980px] text-[16px] font-normal leading-[1.68] tracking-[-0.28px] text-[#5A5064] max-[768px]:mx-auto max-[768px]:max-w-[351px] max-[768px]:space-y-0 max-[768px]:text-center max-[768px]:text-[14px] max-[768px]:leading-[1.7]">
+        <p
+          v-for="paragraph in t.b2b.audience.text"
+          :key="paragraph"
+          class="m-0"
+        >
+          {{ paragraph }}
         </p>
       </div>
 

@@ -1,8 +1,9 @@
 <script setup>
-const marqueeText =
-  'Ziedu arkas • Foto zonas • Zāļu dekors • Kāzu noformējums • Dekora noma • Mākslīgie ziedi • Fona sienas • Pasākumu noformēšana • Ziedu kompozīcijas • Korporatīvais dekors • Individuāls dizains • Skatuvju noformējums • Fotosesiju dekors • Ziedu instalācijas • Event dekors • Arku un sienu noma • Floristikas dekors • Dekors uz atslēgas • Ātra montāža un demontāža •'
+import { computed } from 'vue'
+import { useLanguage } from '../../composables/useLanguage'
 
-const marqueeItems = Array.from({ length: 4 }, () => marqueeText)
+const { t } = useLanguage()
+const marqueeItems = computed(() => Array.from({ length: 4 }, () => t.value.home.marquee))
 </script>
 
 <template>

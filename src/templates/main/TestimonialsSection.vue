@@ -1,47 +1,19 @@
 ﻿<script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import authorImage1Url from '../../assets/author-img-1.jpg'
 import authorImage2Url from '../../assets/author-img-2.jpg'
 import authorImage3Url from '../../assets/author-img-3.jpg'
 import blockquoteIconUrl from '../../assets/blockquote-ic.svg'
+import { useLanguage } from '../../composables/useLanguage'
 
 const testimonialsSliderRef = ref(null)
 const isTestimonialsDragging = ref(false)
 let testimonialsDragStartX = 0
 let testimonialsStartScrollLeft = 0
+const { t } = useLanguage()
+const testimonialImages = [authorImage1Url, authorImage2Url, authorImage3Url, authorImage3Url, authorImage2Url]
 
-const testimonialItems = [
-  {
-    text: 'Сотрудничаем с Zida Ziedi уже второй год подряд. Они - наши спасатели перед большими мероприятиями: всегда пунктуальны, с отличным вкусом и гибким подходом. Последний проект - оформление конференции на 300 человек в Риге - выглядел стильно и современно, без лишнего пафоса. Клиенты были в восторге, и мы тоже.',
-    author: 'Radisson Blu',
-    role: 'Корпоративное оформление, Рига',
-    image: authorImage1Url,
-  },
-  {
-    text: 'Нужно было оформить зал всего за день - команда справилась безупречно. Потрясающий результат и внимание к деталям!',
-    author: 'Анастасия и Эдгарс',
-    role: 'Свадьба, Рига',
-    image: authorImage2Url,
-  },
-  {
-    text: 'Я заказывала оформление на юбилей мамы. Хотелось, чтобы все было красиво, но не вычурно. Ребята предложили концепт с кремовыми и персиковыми оттенками - получилось невероятно нежно. Даже гости спрашивали, кто оформлял зал. Спасибо за внимательность, спокойствие и профессионализм.',
-    author: 'Анна',
-    role: 'Частное мероприятие, Елгава',
-    image: authorImage3Url,
-  },
-  {
-    text: 'Для открытия нашего салона нужен был аккуратный, элегантный декор без перегруза. Команда все почувствовала с первого созвона: палитра, композиции и фотозона получились именно такими, как мы представляли. Пространство выглядело дорого и очень цельно.',
-    author: 'Мария',
-    role: 'Открытие салона, Юрмала',
-    image: authorImage3Url,
-  },
-  {
-    text: 'Обращались за оформлением семейного праздника и остались в полном восторге. Все было собрано вовремя, без лишней суеты, а декор выглядел даже лучше, чем на референсах. Очень приятно работать с людьми, которые так внимательно относятся к деталям.',
-    author: 'Илзе и Томс',
-    role: 'Семейное торжество, Лиепая',
-    image: authorImage2Url,
-  },
-]
+const testimonialItems = computed(() => t.value.home.testimonials.items.map((item, index) => ({ ...item, image: testimonialImages[index] })))
 
 const startTestimonialsDrag = (event) => {
   if (!testimonialsSliderRef.value) return
@@ -68,18 +40,18 @@ const endTestimonialsDrag = () => {
 </script>
 
 <template>
-  <section class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[15px] max-[768px]:pb-16">
+  <section id="testimonials" class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[15px] max-[768px]:pb-16">
     <div class="max-w-[760px]">
       <h2 class="m-0 [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[768px]:mb-[7px] max-[768px]:text-[32px] max-[768px]:leading-[40px]">
-        Отзывы наших клиентов
+        {{ t.home.testimonials.title }}
       </h2>
 
       <div class="mt-8 max-[768px]:mt-0 max-[768px]:mb-[24px]">
         <p class="m-0 text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-          Каждое оформление для нас - личная история.
+          {{ t.home.testimonials.intro[0] }}
         </p>
         <p class="m-0 text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-          Мы благодарны клиентам за доверие и вдохновляющие слова.
+          {{ t.home.testimonials.intro[1] }}
         </p>
       </div>
     </div>
@@ -129,7 +101,7 @@ const endTestimonialsDrag = () => {
         href="#contact"
         class="inline-flex min-h-[62px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-white px-[36px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:w-full max-[768px]:max-w-[300px] max-[768px]:px-[24px] max-[768px]:py-[17px] max-[768px]:text-[13px] max-[768px]:leading-[22px] max-[768px]:tracking-[-0.26px]"
       >
-        Читать все отзывы
+        {{ t.home.testimonials.cta }}
       </a>
     </div>
   </section>

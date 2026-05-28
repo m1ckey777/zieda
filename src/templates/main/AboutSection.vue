@@ -1,37 +1,25 @@
 ﻿<script setup>
+import { computed } from 'vue'
 import aboutIcon1Url from '../../assets/about-ic-1.svg'
 import aboutIcon2Url from '../../assets/about-ic-2.svg'
 import aboutIcon3Url from '../../assets/about-ic-3.svg'
 import aboutImageUrl from '../../assets/about-img.png'
+import { useLanguage } from '../../composables/useLanguage'
 
-const aboutItems = [
-  {
-    icon: aboutIcon1Url,
-    title: 'Индивидуальный подход',
-    text: 'Каждая площадка и событие оформляются по вашему стилю и пожеланиям.',
-  },
-  {
-    icon: aboutIcon2Url,
-    title: 'Быстрый монтаж и демонтаж',
-    text: 'Работаем оперативно, даже при минимальных сроках подготовки.',
-  },
-  {
-    icon: aboutIcon3Url,
-    title: 'Только премиум-материалы',
-    text: 'Используем искусственные цветы и элементы, неотличимые от живых.',
-  },
-]
+const { t } = useLanguage()
+const aboutIcons = [aboutIcon1Url, aboutIcon2Url, aboutIcon3Url]
+const aboutItems = computed(() => t.value.home.about.items.map((item, index) => ({ ...item, icon: aboutIcons[index] })))
 </script>
 
 <template>
   <section id="about" class="mx-auto grid w-[min(1200px,calc(100%-40px))] items-center gap-10 py-[86px] min-[1025px]:grid-cols-[minmax(430px,573px)_minmax(0,1fr)] max-[1024px]:grid-cols-1 max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:gap-7 max-[768px]:pt-[50px] max-[768px]:pb-[30px]">
     <div class="max-w-[573px]">
       <h2 class="m-0 max-w-[573px] [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[768px]:max-w-full max-[768px]:text-[32px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
-        Оформляем пространства, создаём впечатления
+        {{ t.home.about.title }}
       </h2>
 
       <p class="mt-6 max-w-[573px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-4 max-[768px]:max-w-full max-[768px]:text-[14px] max-[768px]:leading-[24px] max-[768px]:tracking-[-0.28px]">
-        Мы влюблены в эстетику и детали. Мы не просто оформляем площадки — мы создаём настроение, передаём атмосферу праздника и индивидуальность каждого события.
+        {{ t.home.about.text }}
       </p>
 
       <div class="mt-11 space-y-8 max-[768px]:mt-8 max-[768px]:space-y-6">
@@ -52,7 +40,7 @@ const aboutItems = [
     <div class="flex items-center justify-end min-[1025px]:self-end max-[1024px]:justify-center max-[768px]:pt-1">
       <img
         :src="aboutImageUrl"
-        alt="Декоративная цветочная арка"
+        :alt="t.home.about.imageAlt"
         class="block w-full max-w-[595px] object-contain min-[1025px]:max-w-[500px] max-[768px]:max-w-full"
       />
     </div>

@@ -1,38 +1,23 @@
 ﻿<script setup>
+import { computed } from 'vue'
 import serviceImage1Url from '../../assets/service-1.jpg'
 import serviceImage2Url from '../../assets/service-2.jpg'
 import serviceImage3Url from '../../assets/service-3.jpg'
+import { useLanguage } from '../../composables/useLanguage'
 
-const serviceCards = [
-  {
-    image: serviceImage1Url,
-    title: 'Оформление мероприятий',
-    text: 'Цветочные арки, фотозоны, стены и композиции, которые делают атмосферу торжества по-настоящему волшебной.',
-    href: '/professional-event-decor',
-  },
-  {
-    image: serviceImage2Url,
-    title: 'Аренда декора для праздника',
-    text: 'Быстрое оформление любого пространства. Готовые решения и индивидуальные проекты для агентств, площадок и частных клиентов.',
-    href: '#contact',
-  },
-  {
-    image: serviceImage3Url,
-    title: 'Сотрудничество и B2B партнёрство',
-    text: 'Работаем с event-компаниями, отелями и организаторами. Предлагаем гибкие условия и постоянную поддержку в реализации.',
-    href: '/b2b-partnership',
-  },
-]
+const { t } = useLanguage()
+const serviceImages = [serviceImage1Url, serviceImage2Url, serviceImage3Url]
+const serviceCards = computed(() => t.value.home.services.cards.map((card, index) => ({ ...card, image: serviceImages[index] })))
 </script>
 
 <template>
   <section id="services" class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[72px] max-[768px]:pb-[82px]">
     <div class="text-center">
       <p class="m-0 [font-family:var(--font-display)] text-[14px] uppercase leading-5 tracking-[0.04em] text-[var(--color-heading)]/90 max-[768px]:text-[13px] max-[768px]:leading-5 max-[768px]:tracking-[-0.7px]">
-        ОТ УЮТНЫХ ВЕЧЕРИНОК ДО МАСШТАБНЫХ СОБЫТИЙ
+        {{ t.home.services.eyebrow }}
       </p>
       <h2 class="mx-auto mt-7 [font-family:var(--font-display)] text-[44px] leading-[1.05] tracking-[-0.04em] text-[var(--color-heading)] max-[768px]:mt-2 max-[768px]:text-[32px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
-        Полный спектр цветочного декора для вашего события
+        {{ t.home.services.title }}
       </h2>
     </div>
 
@@ -54,7 +39,7 @@ const serviceCards = [
             :href="card.href"
             class="mt-6 block border-b border-[var(--color-primary)] text-[14px] font-semibold leading-6 text-[var(--color-primary)] transition duration-200 hover:text-[var(--color-primary-dark)] hover:border-[var(--color-primary-dark)] max-[768px]:mt-[10px] max-[768px]:inline-flex max-[768px]:w-fit max-[768px]:items-center max-[768px]:gap-2 max-[768px]:py-[8px] max-[768px]:text-center max-[768px]:font-[var(--font-sans)] max-[768px]:text-[14px] max-[768px]:font-bold max-[768px]:leading-[14.041px]"
           >
-            <span>Подробнее</span>
+            <span>{{ t.home.services.details }}</span>
             <svg class="hidden h-[14px] w-[9px] max-[768px]:block" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M1 1.25 6.75 7 1 12.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -68,7 +53,7 @@ const serviceCards = [
         href="#contact"
         class="inline-flex min-h-[54px] min-w-[330px] items-center justify-center rounded-full border-2 border-[var(--color-primary)] bg-white px-10 [font-family:var(--font-display)] text-[16px] uppercase leading-[22px] text-[var(--color-primary)] transition duration-200 hover:-translate-y-px hover:bg-[#fff8fa] max-[768px]:min-h-0 max-[768px]:w-full max-[768px]:max-w-[350px] max-[768px]:justify-center max-[768px]:rounded-[555px] max-[768px]:px-[52px] max-[768px]:py-[17px] max-[768px]:text-center max-[768px]:text-[17px] max-[768px]:font-normal max-[768px]:leading-[22px] max-[768px]:tracking-[-0.34px]"
       >
-        Посмотреть все услуги
+        {{ t.home.services.all }}
       </a>
     </div>
   </section>

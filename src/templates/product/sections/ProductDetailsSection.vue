@@ -8,51 +8,42 @@ import pinkColorIconUrl from '../../../assets/product-page/pink-ic.svg'
 import productImageUrl from '../../../assets/product-page/product-jpg.jpg'
 import purpleColorIconUrl from '../../../assets/product-page/purple-ic.svg'
 import starsIconUrl from '../../../assets/product-page/stars-ic.svg'
+import { useLanguage } from '../../../composables/useLanguage'
 
-const productImageSet = [
-  {
-    image: productImageUrl,
-    alt: 'Каркасная арка White Elegance PBR22 с белыми цветами',
-  },
-  {
-    image: productImageUrl,
-    alt: 'Каркасная арка White Elegance PBR22 крупным планом',
-  },
-  {
-    image: productImageUrl,
-    alt: 'Каркасная арка White Elegance PBR22 как центральный декор церемонии',
-  },
-]
+const { t } = useLanguage()
 
 const productColorOptions = [
   {
     key: 'blue',
-    label: 'Голубой',
     swatchIcon: blueColorIconUrl,
     isUsed: true,
   },
   {
     key: 'purple',
-    label: 'Фиолетовый',
     swatchIcon: purpleColorIconUrl,
     isUsed: true,
   },
   {
     key: 'pink',
-    label: 'Розовый',
     swatchIcon: pinkColorIconUrl,
     isUsed: true,
   },
 ]
 
-const recommendedUsage = [
-  'Центральный элемент зоны церемонии',
-  'Фон для стола молодоженов',
-  'Фотозона',
-]
-
 const currentSlideIndex = ref(0)
-const activeGallery = computed(() => productImageSet)
+const activeGallery = computed(() =>
+  t.value.product.imageAlts.map((alt) => ({
+    image: productImageUrl,
+    alt,
+  })),
+)
+
+const colorOptions = computed(() =>
+  productColorOptions.map((option) => ({
+    ...option,
+    label: t.value.product.colors[option.key],
+  })),
+)
 
 const goToSlide = (index) => {
   currentSlideIndex.value = index
@@ -78,21 +69,21 @@ const selectColor = (colorKey) => {
       <div>
         <div class="max-[768px]:mb-[12px]">
           <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
-            Цветочные арки
+            {{ t.product.category }}
           </p>
 
           <h1 class="mt-4 text-[56px] font-normal leading-[64px] tracking-[-1.44px] text-[#22112E] [font-family:var(--font-display)] max-[1024px]:text-[46px] max-[1024px]:leading-[54px] max-[768px]:mt-[10px] max-[768px]:max-w-full max-[768px]:text-[34px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
-            Каркасная арка White Elegance PBR22
+            {{ t.product.title }}
           </h1>
 
           <p class="mt-4 text-[20px] font-normal leading-[30px] tracking-[-0.28px] text-[#6D6474] max-[768px]:mt-3 max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-            Размер - 240cm x 220cm
+            {{ t.product.size }}
           </p>
         </div>
 
         <div class="relative mt-8 overflow-hidden rounded-[18px] bg-[#ebe3dc] max-[768px]:mt-0 max-[768px]:rounded-[18px]">
           <div class="absolute left-[22px] top-[22px] z-10 rounded-[4px] bg-[#2E1742] px-[14px] py-[10px] [font-family:var(--font-display)] text-[16px] font-normal uppercase leading-[18px] tracking-[-0.32px] text-white max-[768px]:left-4 max-[768px]:top-4 max-[768px]:px-[12px] max-[768px]:py-[8px] max-[768px]:text-[13px]">
-            Хит сезона
+            {{ t.product.badge }}
           </div>
 
           <img
@@ -104,7 +95,7 @@ const selectColor = (colorKey) => {
           <button
             type="button"
             class="absolute left-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:bg-white/50 max-[768px]:left-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
-            aria-label="Предыдущее изображение"
+            :aria-label="t.product.previousImage"
             @click="goToPreviousSlide"
           >
             <img :src="arrPrevIconUrl" alt="" class="h-5 w-5 max-[768px]:h-4 max-[768px]:w-4" />
@@ -113,7 +104,7 @@ const selectColor = (colorKey) => {
           <button
             type="button"
             class="absolute right-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:bg-white/50 max-[768px]:right-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
-            aria-label="Следующее изображение"
+            :aria-label="t.product.nextImage"
             @click="goToNextSlide"
           >
             <img :src="arrNextIconUrl" alt="" class="h-5 w-5 max-[768px]:h-4 max-[768px]:w-4" />
@@ -127,7 +118,7 @@ const selectColor = (colorKey) => {
             type="button"
             class="overflow-hidden rounded-[12px] border-2 transition duration-200"
             :class="currentSlideIndex === index ? 'border-[var(--color-primary)] shadow-[0_12px_24px_rgba(233,60,96,0.18)]' : 'border-transparent hover:border-[rgba(233,60,96,0.35)]'"
-            :aria-label="`Показать изображение ${index + 1}`"
+            :aria-label="`${t.product.showImage} ${index + 1}`"
             @click="goToSlide(index)"
           >
             <img
@@ -142,12 +133,12 @@ const selectColor = (colorKey) => {
       <div class="min-[1100px]:pt-[8px]">
         <div class="mt-8 max-[768px]:mt-0">
           <h2 class="m-0 max-w-[430px] text-[32px] font-normal leading-[40px] tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)] max-[768px]:max-w-full max-[768px]:text-[24px] max-[768px]:leading-[32px]">
-            Рекомендованные варианты использования
+            {{ t.product.recommendedTitle }}
           </h2>
 
           <ul class="mt-6 space-y-5 p-0 max-[768px]:mt-5 max-[768px]:space-y-4">
             <li
-              v-for="item in recommendedUsage"
+              v-for="item in t.product.recommendedUsage"
               :key="item"
               class="flex items-center gap-4 list-none"
             >
@@ -160,17 +151,17 @@ const selectColor = (colorKey) => {
         </div>
 
         <p class="mt-8 max-w-[390px] text-[18px] font-normal leading-[32px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-8 max-[768px]:max-w-full max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-          Арка выполнена с использованием качественных искусственных цветов, которые выглядят реалистично и сохраняют аккуратный вид на протяжении всего мероприятия. Конструкция подходит для фотосъёмки, церемоний и торжественных событий, эффектно смотрится как вживую, так и на фотографиях.
+          {{ t.product.description }}
         </p>
 
         <div class="mt-8 max-[768px]:mt-9">
           <h2 class="m-0 text-[32px] font-normal leading-[40px] tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)] max-[768px]:text-[24px] max-[768px]:leading-[32px]">
-            Цветовая сочетаемость
+            {{ t.product.colorTitle }}
           </h2>
 
           <div class="mt-6 flex flex-wrap gap-x-8 gap-y-4 max-[768px]:mt-5 max-[768px]:gap-x-5 max-[768px]:gap-y-4">
             <div
-              v-for="option in productColorOptions"
+              v-for="option in colorOptions"
               :key="option.key"
               class="inline-flex items-center gap-3 text-left"
             >
@@ -191,26 +182,26 @@ const selectColor = (colorKey) => {
     <div class="mt-12 rounded-[40px] border-[4px] max-w-[910px] border-white bg-[#22112E] px-[22px] py-[24px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mt-10 max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
       <div class="relative z-10 mb-[18px]">
         <h2 class="m-0 max-w-[760px] [font-family:var(--font-display)] text-[44px] font-normal leading-[48px] tracking-[-0.7px] text-white max-[768px]:max-w-[100%] max-[768px]:text-[32px] max-[768px]:leading-[36px]">
-          Хотите оформить своё мероприятие?
+          {{ t.product.contact.title }}
         </h2>
 
         <p class="mt-3 max-w-[760px] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-white/80 max-[768px]:mt-3 max-[768px]:max-w-[100%] max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-          Оставьте заявку, и мы подберём идеальное оформление под ваш стиль и площадку.
+          {{ t.product.contact.description }}
         </p>
       </div>
 
       <div class="grid gap-5 min-[760px]:grid-cols-2 max-[759px]:grid-cols-1">
         <label class="block">
-          <span class="sr-only">Ваше имя</span>
+          <span class="sr-only">{{ t.product.contact.name }}</span>
           <input
             type="text"
-            placeholder="Ваше имя"
+            :placeholder="t.product.contact.name"
             class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
           />
         </label>
 
         <label class="block">
-          <span class="sr-only">Ваш телефон</span>
+          <span class="sr-only">{{ t.product.contact.phone }}</span>
           <input
             type="tel"
             placeholder="+371 00 000 000"
@@ -223,12 +214,12 @@ const selectColor = (colorKey) => {
         type="button"
         class="mt-8 inline-flex min-h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:min-h-[52px]"
       >
-        Заказать оформление
+        {{ t.product.contact.submit }}
       </button>
 
       <p class="mx-auto mt-6 max-w-[760px] text-center text-[11px] font-normal leading-[16px] tracking-[-0.22px] text-white max-[768px]:mt-[16px] max-[768px]:max-w-[330px] max-[768px]:text-[10px] max-[768px]:leading-[1.45]">
-        Отправляя эту форму, вы соглашаетесь, что предоставленные данные будут использованы для связи с вами и обработаны в соответствии с нашей
-        <a href="#" class="underline underline-offset-2 hover:no-underline">Политикой конфиденциальности</a>.
+        {{ t.product.contact.privacyBefore }}
+        <a href="#" class="underline underline-offset-2 hover:no-underline">{{ t.product.contact.privacyLink }}</a>.
       </p>
     </div>
 
@@ -247,7 +238,7 @@ const selectColor = (colorKey) => {
             <path d="M10.625 21.25C11.2113 21.25 11.6875 20.7738 11.6875 20.1875C11.6875 19.6012 11.2113 19.125 10.625 19.125C10.0387 19.125 9.5625 19.6012 9.5625 20.1875C9.5625 20.7738 10.0387 21.25 10.625 21.25Z" fill="currentColor" />
             <path d="M18.5 21.25C19.0863 21.25 19.5625 20.7738 19.5625 20.1875C19.5625 19.6012 19.0863 19.125 18.5 19.125C17.9137 19.125 17.4375 19.6012 17.4375 20.1875C17.4375 20.7738 17.9137 21.25 18.5 21.25Z" fill="currentColor" />
           </svg>
-          Добавить в заказ
+          {{ t.product.addToOrder }}
         </button>
       </div>
     </div> -->

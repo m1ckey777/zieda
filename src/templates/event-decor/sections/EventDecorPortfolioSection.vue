@@ -1,40 +1,35 @@
-﻿<script setup>
-import { ref } from 'vue'
+<script setup>
+import { computed, ref } from 'vue'
 import UiButton from '../../../components/shared/UiButton.vue'
 import portfolioImage1Url from '../../../assets/event-decor-portfolio-1.jpg'
 import portfolioImage2Url from '../../../assets/event-decor-portfolio-2.jpg'
 import portfolioImage3Url from '../../../assets/event-decor-portfolio-3.jpg'
 import portfolioImage4Url from '../../../assets/event-decor-portfolio-4.jpg'
 import portfolioImage5Url from '../../../assets/event-decor-portfolio-5.jpg'
+import { useLanguage } from '../../../composables/useLanguage'
+
+const { t } = useLanguage()
+
+const portfolioImages = [
+  portfolioImage1Url,
+  portfolioImage2Url,
+  portfolioImage3Url,
+  portfolioImage4Url,
+  portfolioImage5Url,
+]
+
+const portfolioItems = computed(() =>
+  portfolioImages.map((image, index) => ({
+    image,
+    alt: t.value.eventDecor.portfolio.imageAlts[index],
+  })),
+)
 
 const portfolioSliderRef = ref(null)
 const isPortfolioDragging = ref(false)
 let portfolioDragStartX = 0
 let portfolioStartScrollLeft = 0
 let activePortfolioPointerId = null
-
-const portfolioItems = [
-  {
-    image: portfolioImage1Url,
-    alt: 'Белое оформление свадебного ужина на открытом воздухе',
-  },
-  {
-    image: portfolioImage2Url,
-    alt: 'Нежная цветочная композиция в пастельных оттенках',
-  },
-  {
-    image: portfolioImage3Url,
-    alt: 'Оформление фотозоны с белыми цветами и металлической рамой',
-  },
-  {
-    image: portfolioImage4Url,
-    alt: 'Фактурная стена из крупных кремовых роз',
-  },
-  {
-    image: portfolioImage5Url,
-    alt: 'Высокая центральная цветочная композиция для банкета',
-  },
-]
 
 const startPortfolioDrag = (event) => {
   if (!portfolioSliderRef.value) return
@@ -84,12 +79,12 @@ const endPortfolioDrag = (event) => {
     class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[20px] pb-[70px] max-[768px]:w-[calc(100%-32px)] max-[768px]:pt-[38px] max-[768px]:pb-[40px]"
   >
     <div class="w-full">
-      <h2 class="m-0  [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[1024px]:text-[40px] max-[1024px]:leading-[48px] max-[768px]:max-w-full max-[768px]:text-[36px] max-[768px]:leading-[40px]">
-        Как выглядят оформленные нами события
+      <h2 class="m-0 [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[1024px]:text-[40px] max-[1024px]:leading-[48px] max-[768px]:max-w-full max-[768px]:text-[36px] max-[768px]:leading-[40px]">
+        {{ t.eventDecor.portfolio.title }}
       </h2>
 
       <p class="m-0 mt-[13px] max-w-[980px] font-[var(--font-sans)] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-3 max-[768px]:max-w-full max-[768px]:text-[14px] max-[768px]:leading-[24px]">
-        От свадебных арок до корпоративных фотозон — каждая работа создаётся вручную и с вниманием к детали.
+        {{ t.eventDecor.portfolio.text }}
       </p>
 
       <div class="mt-[38px] max-[768px]:mt-[28px]">
@@ -121,7 +116,7 @@ const endPortfolioDrag = (event) => {
       <div class="mt-[30px] max-[768px]:mt-[34px]">
         <UiButton
           href="#contact"
-          label="Связаться с нами"
+          :label="t.eventDecor.portfolio.cta"
           class="min-h-0 w-full max-w-[390px] px-10 py-[17px] text-[16px] font-normal leading-[22px] tracking-[-0.32px] max-[768px]:max-w-full"
         />
       </div>

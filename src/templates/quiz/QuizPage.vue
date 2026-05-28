@@ -1,133 +1,275 @@
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import intlTelInput from 'intl-tel-input'
+import 'intl-tel-input/styles'
 import checkIconUrl from '../../assets/quiz/quiz-check.svg'
 import SiteHeader from '../../components/shared/SiteHeader.vue'
 import corporateImageUrl from '../../assets/quiz/event-corporate.png'
-import decorHeroUrl from '../../assets/quiz/quiz-decor.png'
+import decorHeroUrl from '../../assets/quiz/quiz-decor-pc.png'
 import otherImageUrl from '../../assets/quiz/event-other.png'
 import presentationImageUrl from '../../assets/quiz/event-presentation.png'
 import weddingImageUrl from '../../assets/quiz/event-wedding.png'
 import anniversaryImageUrl from '../../assets/quiz/event-anniversary.png'
+import { useLanguage } from '../../composables/useLanguage'
 
+const { t } = useLanguage()
 const phase = ref('form')
+const dateInputRef = ref(null)
+const phoneInputRef = ref(null)
+const latestSubmission = ref(null)
+let itiInstance = null
 
 const answers = reactive({
   eventType: 'birthday',
   date: '',
   venue: 'outdoor',
-  guests: '50 - 100',
+  guests: 'from50to100',
   decorate: ['welcome', 'main-table', 'photozone'],
   decorateOther: '',
-  style: 'Modern',
+  style: 'modern',
   fullness: 3,
-  palette: 'Под бренд',
-  flowerType: 'Микс',
+  palette: 'brand',
+  flowerType: 'mix',
   services: [],
-  timeWindow: 'День',
-  budget: '€700–1500',
+  timeWindow: 'day',
+  budget: 'medium',
   restrictions: '',
   documents: false,
-  name: 'Александр',
+  name: 'Aleksandr',
   phone: '',
   email: '',
   channels: [],
   reference: '',
 })
 
-const eventTypes = [
-  { label: 'Свадьба', value: 'wedding', image: weddingImageUrl },
-  { label: 'Корпоратив', value: 'corporate', image: corporateImageUrl },
-  { label: 'День рождения', value: 'birthday', image: presentationImageUrl },
-  { label: 'Юбилей', value: 'anniversary', image: anniversaryImageUrl },
-  { label: 'Презентация', value: 'presentation', image: presentationImageUrl },
-  { label: 'Другое', value: 'other', image: otherImageUrl },
-]
+const eventTypeImages = {
+  wedding: weddingImageUrl,
+  corporate: corporateImageUrl,
+  birthday: presentationImageUrl,
+  anniversary: anniversaryImageUrl,
+  presentation: presentationImageUrl,
+  other: otherImageUrl,
+}
 
-const venueOptions = [
-  'Ресторан',
-  'Загород',
-  'Квартира',
-  'Отель',
-  'Открытая площадка',
-]
+const optionFromMap = (labels, keys) => keys.map((value) => ({ value, label: labels[value] }))
 
-const guestOptions = ['до 20', '20 - 50', '50 - 100', '100 - 200', '200 +']
+const eventTypes = computed(() => optionFromMap(t.value.quiz.eventTypes, ['wedding', 'corporate', 'birthday', 'anniversary', 'presentation', 'other']).map((item) => ({
+  ...item,
+  image: eventTypeImages[item.value],
+})))
 
-const decorateOptions = [
-  { label: 'Welcome-зона / вход', value: 'welcome' },
-  { label: 'Фотозона (стена / арка / неон)', value: 'photozone' },
-  { label: 'Арка / зона церемонии', value: 'ceremony' },
-  { label: 'Президиум / main table', value: 'main-table' },
-  { label: 'Гостевые столы (центральные композиции)', value: 'guest-tables' },
-  { label: 'Потолочные / подвесные композиции', value: 'hanging' },
-  { label: 'Букет / бутоньерки', value: 'bouquet' },
-]
+const venueOptions = computed(() => optionFromMap(t.value.quiz.venues, ['restaurant', 'countryside', 'apartment', 'hotel', 'outdoor']))
+const guestOptions = computed(() => optionFromMap(t.value.quiz.guests, ['upto20', 'from20to50', 'from50to100', 'from100to200', 'over200']))
+const decorateOptions = computed(() => optionFromMap(t.value.quiz.decorate, ['welcome', 'photozone', 'ceremony', 'mainTable', 'guestTables', 'hanging', 'bouquet']))
+const styleOptions = computed(() => optionFromMap(t.value.quiz.styles, ['classic', 'modern', 'minimal', 'luxury', 'boho']))
 
-const styleOptions = ['Классика', 'Modern', 'Минимал', 'Luxury', 'Boho']
+const paletteColors = {
+  cream: ['#f8efe4', '#fffaf4', '#ffffff'],
+  green: ['#f7f9ee', '#9bb957', '#38551b'],
+  pastel: ['#d9b6a9', '#edc8bd', '#e9e6d8'],
+  bright: ['#d62d73', '#ff7b00', '#ffc400'],
+  bordeaux: ['#f3bf84', '#8e0d2d', '#67001f'],
+  lavender: ['#6d5aa6', '#9285c9', '#c7cce9'],
+  brand: ['#000000', '#ef7a00', '#ffffff'],
+}
 
-const paletteOptions = [
-  { label: 'Белый / Крем', value: 'Белый / Крем', colors: ['#f8efe4', '#fffaf4', '#ffffff'] },
-  { label: 'Белый + Зелень', value: 'Белый + Зелень', colors: ['#f7f9ee', '#9bb957', '#38551b'] },
-  { label: 'Пастель', value: 'Пастель', colors: ['#d9b6a9', '#edc8bd', '#e9e6d8'] },
-  { label: 'Яркая', value: 'Яркая', colors: ['#d62d73', '#ff7b00', '#ffc400'] },
-  { label: 'Бордо', value: 'Бордо', colors: ['#f3bf84', '#8e0d2d', '#67001f'] },
-  { label: 'Лаванда', value: 'Лаванда', colors: ['#6d5aa6', '#9285c9', '#c7cce9'] },
-  { label: 'Под бренд', value: 'Под бренд', colors: ['#000000', '#ef7a00', '#ffffff'] },
-]
+const paletteOptions = computed(() => optionFromMap(t.value.quiz.palettes, ['cream', 'green', 'pastel', 'bright', 'bordeaux', 'lavender', 'brand']).map((item) => ({
+  ...item,
+  colors: paletteColors[item.value],
+})))
 
-const flowerTypeOptions = [
-  { label: 'Декор', value: 'Декор', image: weddingImageUrl },
-  { label: 'Живые', value: 'Живые', image: corporateImageUrl },
-  { label: 'Микс', value: 'Микс', image: weddingImageUrl },
-]
+const flowerTypeImages = {
+  decor: weddingImageUrl,
+  live: corporateImageUrl,
+  mix: weddingImageUrl,
+}
 
-const serviceOptions = ['Самовывоз', 'Доставка', 'Монтаж']
-const timeOptions = ['Утро', 'День', 'Вечер']
-const budgetOptions = ['€300–700', '€700–1500', '€1500–3000', '€3000+', 'Хочу понять по факту']
-const channelOptions = ['Телефон', 'WhatsApp', 'Telegram', 'Email']
+const flowerTypeOptions = computed(() => optionFromMap(t.value.quiz.flowerTypes, ['decor', 'live', 'mix']).map((item) => ({
+  ...item,
+  image: flowerTypeImages[item.value],
+})))
+
+const serviceOptions = computed(() => optionFromMap(t.value.quiz.services, ['pickup', 'delivery', 'setup']))
+const timeOptions = computed(() => optionFromMap(t.value.quiz.timeWindows, ['morning', 'day', 'evening']))
+const budgetOptions = computed(() => optionFromMap(t.value.quiz.budgets, ['low', 'medium', 'high', 'premium', 'custom']))
+const channelOptions = computed(() => optionFromMap(t.value.quiz.channels, ['phone', 'whatsapp', 'telegram', 'email']))
+
+const budgetRanges = {
+  low: [500, 800],
+  medium: [1200, 1900],
+  high: [2300, 3400],
+  premium: [3600, 5600],
+  custom: [1500, 2400],
+}
+
+const eventAdjustments = {
+  wedding: 260,
+  corporate: 180,
+  birthday: 120,
+  anniversary: 140,
+  presentation: 160,
+  other: 100,
+}
+
+const venueAdjustments = {
+  restaurant: 0,
+  countryside: 180,
+  apartment: -80,
+  hotel: 90,
+  outdoor: 240,
+}
+
+const guestAdjustments = {
+  upto20: -100,
+  from20to50: 0,
+  from50to100: 260,
+  from100to200: 640,
+  over200: 1120,
+}
+
+const decorateAdjustments = {
+  welcome: 180,
+  photozone: 360,
+  ceremony: 420,
+  'main-table': 300,
+  'guest-tables': 420,
+  hanging: 620,
+  bouquet: 120,
+}
+
+const styleMultipliers = {
+  classic: 1,
+  modern: 1.05,
+  minimal: 0.92,
+  luxury: 1.35,
+  boho: 1.12,
+}
+
+const paletteAdjustments = {
+  cream: 0,
+  green: 80,
+  pastel: 60,
+  bright: 120,
+  bordeaux: 120,
+  lavender: 90,
+  brand: 180,
+}
+
+const flowerTypeAdjustments = {
+  decor: -80,
+  live: 320,
+  mix: 180,
+}
+
+const serviceAdjustments = {
+  pickup: -80,
+  delivery: 120,
+  setup: 220,
+}
+
+const fullnessLabels = computed(() => t.value.quiz.fullness)
 
 const resultRows = computed(() => [
-  ['Тип мероприятия', selectedEventLabel.value],
-  ['Формат', answers.venue],
-  ['Количество гостей', answers.guests],
-  ['Что украсить', selectedDecorLabels.value.join(' / ') || 'Не выбрано'],
-  ['Стиль', answers.style],
-  ['Пышность', fullnessLabel.value],
-  ['Цветовая палитра', answers.palette],
-  ['Цветы', answers.flowerType],
-  ['Приоритет', answers.timeWindow],
-  ['Ограничения', answers.restrictions ? 'Есть' : 'Нет'],
+  [t.value.quiz.resultLabels.eventType, selectedEventLabel.value],
+  [t.value.quiz.resultLabels.date, formattedDate.value],
+  [t.value.quiz.resultLabels.venue, selectedVenueLabel.value],
+  [t.value.quiz.resultLabels.guests, selectedGuestLabel.value],
+  [t.value.quiz.resultLabels.decorate, selectedDecorLabels.value.join(' / ') || t.value.quiz.notSelected],
+  [t.value.quiz.resultLabels.style, selectedStyleLabel.value],
+  [t.value.quiz.resultLabels.fullness, fullnessLabel.value],
+  [t.value.quiz.resultLabels.palette, selectedPaletteLabel.value],
+  [t.value.quiz.resultLabels.flowers, selectedFlowerTypeLabel.value],
+  [t.value.quiz.resultLabels.services, selectedServiceLabels.value.join(' / ') || t.value.quiz.notSelectedPlural],
+  [t.value.quiz.resultLabels.timeWindow, selectedTimeWindowLabel.value],
+  [t.value.quiz.resultLabels.budget, selectedBudgetLabel.value],
+  [t.value.quiz.resultLabels.contact, contactSummary.value],
+  [t.value.quiz.resultLabels.channels, selectedChannelLabels.value.join(' / ') || t.value.quiz.notSelected],
+  [t.value.quiz.resultLabels.documents, answers.documents ? t.value.quiz.needed : t.value.quiz.notNeeded],
+  [t.value.quiz.resultLabels.restrictions, answers.restrictions ? t.value.quiz.yes : t.value.quiz.no],
+  [t.value.quiz.resultLabels.reference, answers.reference || t.value.quiz.notSpecified],
 ])
 
-const selectedEventLabel = computed(() => eventTypes.find((item) => item.value === answers.eventType)?.label ?? 'Другое')
-const selectedDecorLabels = computed(() => decorateOptions.filter((item) => answers.decorate.includes(item.value)).map((item) => item.label))
-const fullnessLabel = computed(() => ['Минимум', 'Умеренно', 'Минимум', 'Пышно', 'Максимум'][answers.fullness - 1] ?? 'Минимум')
-const estimate = computed(() => {
-  const baseByBudget = {
-    '€300–700': [700, 1000],
-    '€700–1500': [1600, 2200],
-    '€1500–3000': [2400, 3400],
-    '€3000+': [3600, 5200],
-    'Хочу понять по факту': [1600, 2200],
-  }
+const selectedEventLabel = computed(() => eventTypes.value.find((item) => item.value === answers.eventType)?.label ?? t.value.quiz.eventTypes.other)
+const selectedVenueLabel = computed(() => venueOptions.value.find((item) => item.value === answers.venue)?.label ?? t.value.quiz.notSelected)
+const selectedGuestLabel = computed(() => guestOptions.value.find((item) => item.value === answers.guests)?.label ?? t.value.quiz.notSelected)
+const selectedStyleLabel = computed(() => styleOptions.value.find((item) => item.value === answers.style)?.label ?? t.value.quiz.notSelected)
+const selectedPaletteLabel = computed(() => paletteOptions.value.find((item) => item.value === answers.palette)?.label ?? t.value.quiz.notSelected)
+const selectedFlowerTypeLabel = computed(() => flowerTypeOptions.value.find((item) => item.value === answers.flowerType)?.label ?? t.value.quiz.notSelected)
+const selectedTimeWindowLabel = computed(() => timeOptions.value.find((item) => item.value === answers.timeWindow)?.label ?? t.value.quiz.notSelected)
+const selectedBudgetLabel = computed(() => budgetOptions.value.find((item) => item.value === answers.budget)?.label ?? t.value.quiz.notSelected)
+const selectedDecorLabels = computed(() => decorateOptions.value.filter((item) => answers.decorate.includes(item.value)).map((item) => item.label))
+const selectedServiceLabels = computed(() => serviceOptions.value.filter((item) => answers.services.includes(item.value)).map((item) => item.label))
+const selectedChannelLabels = computed(() => channelOptions.value.filter((item) => answers.channels.includes(item.value)).map((item) => item.label))
+const fullnessLabel = computed(() => fullnessLabels.value[answers.fullness - 1] ?? fullnessLabels.value[0])
+const formattedDate = computed(() => {
+  if (!answers.date) return t.value.quiz.dateNotSelected
 
-  return baseByBudget[answers.budget] ?? [1600, 2200]
+  const [year, month, day] = answers.date.split('-')
+  return `${day}.${month}.${year}`
+})
+const contactSummary = computed(() => {
+  const parts = [answers.name, answers.phone, answers.email].filter(Boolean)
+  return parts.join(' / ') || t.value.quiz.contactEmpty
+})
+
+const roundTo50 = (value) => Math.max(0, Math.round(value / 50) * 50)
+
+const estimate = computed(() => {
+  const baseRange = budgetRanges[answers.budget] ?? budgetRanges.custom
+  const decorateScope = answers.decorate.reduce((sum, item) => sum + (decorateAdjustments[item] ?? 0), 0)
+  const servicesScope = answers.services.reduce((sum, item) => sum + (serviceAdjustments[item] ?? 0), 0)
+  const baseScope =
+    (eventAdjustments[answers.eventType] ?? 0) +
+    (venueAdjustments[answers.venue] ?? 0) +
+    (guestAdjustments[answers.guests] ?? 0) +
+    decorateScope +
+    servicesScope +
+    (paletteAdjustments[answers.palette] ?? 0) +
+    (flowerTypeAdjustments[answers.flowerType] ?? 0)
+
+  const fullnessScope = 1 + (answers.fullness - 3) * 0.12
+  const styleScope = styleMultipliers[answers.style] ?? 1
+  const scopedPrice = Math.max(0, baseScope * fullnessScope * styleScope)
+  const lower = roundTo50(baseRange[0] + scopedPrice * 0.38)
+  const upper = roundTo50(baseRange[1] + scopedPrice * 0.72)
+
+  return [lower, Math.max(upper, lower + 300)]
 })
 
 const packages = computed(() => [
   {
     name: 'Base',
     price: estimate.value[0],
-    description: 'Недорого, но со вкусом. Стильные композиции и точные акценты для камерного события.',
-    items: ['Фон для стола молодоженов', 'Фотозона'],
+    description: `${t.value.quiz.packages.baseDescriptionStart} "${selectedVenueLabel.value}" ${t.value.quiz.packages.baseDescriptionEnd}`,
+    items: [
+      selectedDecorLabels.value[0] || t.value.quiz.packages.mainZone,
+      selectedDecorLabels.value[1] || `${t.value.quiz.packages.palette}: ${selectedPaletteLabel.value}`,
+      `${t.value.quiz.packages.style}: ${selectedStyleLabel.value}`,
+    ],
   },
   {
     name: 'Wow',
     price: estimate.value[1],
-    description: 'Больше объёма, цветов и деталей для выразительного оформления площадки.',
-    items: ['Центральная зона церемонии', 'Фон для фото', 'Фотозона'],
+    description: `${t.value.quiz.packages.wowDescriptionStart} "${fullnessLabel.value.toLowerCase()}" ${t.value.quiz.packages.wowDescriptionEnd}`,
+    items: [
+      ...selectedDecorLabels.value,
+      selectedServiceLabels.value.length ? `${t.value.quiz.packages.services}: ${selectedServiceLabels.value.join(', ')}` : t.value.quiz.packages.coordination,
+      `${t.value.quiz.packages.flowers}: ${selectedFlowerTypeLabel.value}`,
+    ].slice(0, 5),
   },
 ])
+
+const quizSubmission = computed(() => ({
+  source: 'quiz',
+  estimate: {
+    from: estimate.value[0],
+    to: estimate.value[1],
+    label: `${formatCurrency(estimate.value[0])} — ${formatCurrency(estimate.value[1])}`,
+  },
+  answers: Object.fromEntries(resultRows.value),
+  rawAnswers: { ...answers, decorate: [...answers.decorate], services: [...answers.services], channels: [...answers.channels] },
+  packages: packages.value,
+}))
 
 const formatCurrency = (value) => `€ ${value.toLocaleString('en-US')}`
 
@@ -145,7 +287,55 @@ const scrollToQuiz = () => {
   document.querySelector('.quiz-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+const openDatePicker = () => {
+  const input = dateInputRef.value
+  input?.focus()
+
+  try {
+    input?.showPicker?.()
+  } catch {
+    // Some browsers only allow showPicker directly from a trusted click.
+  }
+}
+
+const syncPhoneValue = () => {
+  answers.phone = phoneInputRef.value?.value ?? ''
+}
+
+const destroyPhoneInput = () => {
+  if (phoneInputRef.value) {
+    phoneInputRef.value.removeEventListener('input', syncPhoneValue)
+  }
+
+  itiInstance?.destroy()
+  itiInstance = null
+}
+
+const bindPhoneInput = () => {
+  if (!phoneInputRef.value) return
+
+  destroyPhoneInput()
+
+  itiInstance = intlTelInput(phoneInputRef.value, {
+    initialCountry: 'lv',
+    separateDialCode: true,
+    nationalMode: false,
+    autoPlaceholder: 'polite',
+    formatAsYouType: true,
+    strictMode: true,
+    countryOrder: ['lv'],
+    loadUtils: () => import('intl-tel-input/utils'),
+  })
+
+  itiInstance.setCountry('lv')
+  phoneInputRef.value.value = answers.phone
+  phoneInputRef.value.addEventListener('input', syncPhoneValue)
+}
+
 const showResult = () => {
+  syncPhoneValue()
+  latestSubmission.value = quizSubmission.value
+  destroyPhoneInput()
   phase.value = 'result'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -153,7 +343,19 @@ const showResult = () => {
 const restartQuiz = () => {
   phase.value = 'form'
   window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  requestAnimationFrame(() => {
+    bindPhoneInput()
+  })
 }
+
+onMounted(() => {
+  bindPhoneInput()
+})
+
+onBeforeUnmount(() => {
+  destroyPhoneInput()
+})
 </script>
 
 <template>
@@ -164,9 +366,9 @@ const restartQuiz = () => {
       <section v-if="phase === 'form'" class="quiz-start quiz-intro">
         <img :src="decorHeroUrl" alt="" class="quiz-start-decor" />
         <div class="quiz-start-content">
-          <p>Всего за 1 минуту</p>
-          <h1>Подберём декор и покажем ориентировочную смету</h1>
-          <button type="button" @click="scrollToQuiz">Начать</button>
+          <p>{{ t.quiz.introBadge }}</p>
+          <h1>{{ t.quiz.introTitle }}</h1>
+          <button type="button" @click="scrollToQuiz">{{ t.quiz.start }}</button>
         </div>
       </section>
 
@@ -174,7 +376,7 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>1</span>
-            <h2>Какой тип мероприятия вы планируете?</h2>
+            <h2>{{ t.quiz.steps.eventType }}</h2>
           </div>
           <div class="quiz-image-grid">
             <button
@@ -197,22 +399,22 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>2</span>
-            <h2>Дата и формат площадки</h2>
+            <h2>{{ t.quiz.steps.venue }}</h2>
           </div>
-          <label class="quiz-date-field">
-            <span class="sr-only">Выберите дату</span>
-            <input v-model="answers.date" type="date" />
+          <label class="quiz-date-field" @click="openDatePicker">
+            <span class="sr-only">{{ t.quiz.dateLabel }}</span>
+            <input ref="dateInputRef" v-model="answers.date" type="date" @click="openDatePicker" />
           </label>
           <div class="quiz-placeholder-grid">
             <button
               v-for="item in venueOptions"
-              :key="item"
+              :key="item.value"
               type="button"
-              :class="{ 'is-selected': answers.venue === item }"
-              @click="answers.venue = item"
+              :class="{ 'is-selected': answers.venue === item.value }"
+              @click="answers.venue = item.value"
             >
               <span></span>
-              <em>{{ item }}</em>
+              <em>{{ item.label }}</em>
             </button>
           </div>
         </div>
@@ -220,17 +422,17 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>3</span>
-            <h2>Количество гостей</h2>
+            <h2>{{ t.quiz.steps.guests }}</h2>
           </div>
           <div class="quiz-button-grid">
             <button
               v-for="item in guestOptions"
-              :key="item"
+              :key="item.value"
               type="button"
-              :class="{ 'is-selected': answers.guests === item }"
-              @click="answers.guests = item"
+              :class="{ 'is-selected': answers.guests === item.value }"
+              @click="answers.guests = item.value"
             >
-              {{ item }}
+              {{ item.label }}
             </button>
           </div>
         </div>
@@ -238,7 +440,7 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>4</span>
-            <h2>Что нужно украсить?</h2>
+            <h2>{{ t.quiz.steps.decorate }}</h2>
           </div>
           <div class="quiz-checkbox-list">
             <label
@@ -254,26 +456,26 @@ const restartQuiz = () => {
               <span>{{ item.label }}</span>
             </label>
           </div>
-          <input v-model="answers.decorateOther" class="quiz-text-input" type="text" placeholder="Напишите свое" />
+          <input v-model="answers.decorateOther" class="quiz-text-input" type="text" :placeholder="t.quiz.otherPlaceholder" />
         </div>
 
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>5</span>
-            <h2>Стиль и пышность</h2>
+            <h2>{{ t.quiz.steps.style }}</h2>
           </div>
           <div class="quiz-stack-buttons">
             <button
               v-for="item in styleOptions"
-              :key="item"
+              :key="item.value"
               type="button"
-              :class="{ 'is-selected': answers.style === item }"
-              @click="answers.style = item"
+              :class="{ 'is-selected': answers.style === item.value }"
+              @click="answers.style = item.value"
             >
-              {{ item }}
+              {{ item.label }}
             </button>
           </div>
-          <p class="quiz-slider-label">Планируемая пышность</p>
+          <p class="quiz-slider-label">{{ t.quiz.fullnessLabel }}</p>
           <div class="quiz-scale">
             <button
               v-for="index in 5"
@@ -282,7 +484,7 @@ const restartQuiz = () => {
               :class="{ 'is-selected': answers.fullness >= index }"
               @click="answers.fullness = index"
             >
-              {{ index < 4 ? '✓' : `0${index}` }}
+              {{ answers.fullness >= index ? '✓' : index }}
             </button>
           </div>
         </div>
@@ -290,7 +492,7 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>6</span>
-            <h2>Цветовая палитра</h2>
+            <h2>{{ t.quiz.steps.palette }}</h2>
           </div>
           <div class="quiz-palette-list">
             <button
@@ -311,7 +513,7 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>7</span>
-            <h2>Искусственные или живые</h2>
+            <h2>{{ t.quiz.steps.flowers }}</h2>
           </div>
           <div class="quiz-image-grid quiz-image-grid-compact">
             <button
@@ -333,28 +535,28 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>8</span>
-            <h2>Услуги</h2>
+            <h2>{{ t.quiz.steps.services }}</h2>
           </div>
           <div class="quiz-checkbox-list">
-            <label v-for="item in serviceOptions" :key="item" class="quiz-checkbox-row">
+            <label v-for="item in serviceOptions" :key="item.value" class="quiz-checkbox-row">
               <input
                 type="checkbox"
-                :checked="answers.services.includes(item)"
-                @change="toggleArrayValue(answers.services, item)"
+                :checked="answers.services.includes(item.value)"
+                @change="toggleArrayValue(answers.services, item.value)"
               />
-              <span>{{ item }}</span>
+              <span>{{ item.label }}</span>
             </label>
           </div>
-          <p class="quiz-slider-label">Окна времени</p>
+          <p class="quiz-slider-label">{{ t.quiz.timeLabel }}</p>
           <div class="quiz-segmented">
             <button
               v-for="item in timeOptions"
-              :key="item"
+              :key="item.value"
               type="button"
-              :class="{ 'is-selected': answers.timeWindow === item }"
-              @click="answers.timeWindow = item"
+              :class="{ 'is-selected': answers.timeWindow === item.value }"
+              @click="answers.timeWindow = item.value"
             >
-              {{ item }}
+              {{ item.label }}
             </button>
           </div>
         </div>
@@ -362,17 +564,17 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>9</span>
-            <h2>Бюджет и ожидания</h2>
+            <h2>{{ t.quiz.steps.budget }}</h2>
           </div>
           <div class="quiz-stack-buttons">
             <button
               v-for="item in budgetOptions"
-              :key="item"
+              :key="item.value"
               type="button"
-              :class="{ 'is-selected': answers.budget === item }"
-              @click="answers.budget = item"
+              :class="{ 'is-selected': answers.budget === item.value }"
+              @click="answers.budget = item.value"
             >
-              {{ item }}
+              {{ item.label }}
             </button>
           </div>
         </div>
@@ -380,47 +582,47 @@ const restartQuiz = () => {
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>10</span>
-            <h2>Условия и ограничения</h2>
+            <h2>{{ t.quiz.steps.restrictions }}</h2>
           </div>
           <label class="quiz-textarea-label">
-            <span>Есть ли запреты площадки (свечи, крепления к стенам, конфетти и т.п.)</span>
+            <span>{{ t.quiz.restrictionsLabel }}</span>
             <textarea v-model="answers.restrictions"></textarea>
           </label>
           <label class="quiz-checkbox-row">
             <input v-model="answers.documents" type="checkbox" />
-            <span>Нужны ли документы (счёт/договор)</span>
+            <span>{{ t.quiz.documentsLabel }}</span>
           </label>
         </div>
 
         <div class="quiz-step quiz-step-last">
           <div class="quiz-step-title">
             <span>11</span>
-            <h2>Контакты для сметы</h2>
+            <h2>{{ t.quiz.steps.contacts }}</h2>
           </div>
           <div class="quiz-contact-fields">
-            <input v-model="answers.name" type="text" placeholder="Ваше имя" />
-            <input v-model="answers.phone" type="tel" placeholder="+371 00 000 000" />
+            <input v-model="answers.name" type="text" :placeholder="t.quiz.namePlaceholder" />
+            <input ref="phoneInputRef" v-model="answers.phone" type="tel" name="phone" class="quiz-phone-input" />
             <input v-model="answers.email" type="email" placeholder="Email" />
           </div>
-          <p class="quiz-slider-label">Предпочтительный канал связи</p>
+          <p class="quiz-slider-label">{{ t.quiz.channelLabel }}</p>
           <div class="quiz-channel-grid">
-            <label v-for="item in channelOptions" :key="item" class="quiz-checkbox-row">
+            <label v-for="item in channelOptions" :key="item.value" class="quiz-checkbox-row">
               <input
                 type="checkbox"
-                :checked="answers.channels.includes(item)"
-                @change="toggleArrayValue(answers.channels, item)"
+                :checked="answers.channels.includes(item.value)"
+                @change="toggleArrayValue(answers.channels, item.value)"
               />
-              <span>{{ item }}</span>
+              <span>{{ item.label }}</span>
             </label>
           </div>
-          <input v-model="answers.reference" class="quiz-text-input" type="text" placeholder="Ссылка на референс (Pinterest и т.п.)" />
-          <button type="button" class="quiz-submit-button" @click="showResult">Получить предложение</button>
+          <input v-model="answers.reference" class="quiz-text-input" type="text" :placeholder="t.quiz.referencePlaceholder" />
+          <button type="button" class="quiz-submit-button" @click="showResult">{{ t.quiz.submit }}</button>
         </div>
       </section>
 
       <section v-else class="quiz-result">
         <div class="quiz-result-summary">
-          <p>Ориентировочная стоимость</p>
+          <p>{{ t.quiz.resultTitle }}</p>
           <h1>{{ formatCurrency(estimate[0]) }} — {{ formatCurrency(estimate[1]) }}</h1>
           <dl>
             <template v-for="row in resultRows" :key="row[0]">
@@ -432,13 +634,13 @@ const restartQuiz = () => {
 
         <div class="quiz-package-row">
           <article v-for="item in packages" :key="item.name" class="quiz-package">
-            <p>Пакет</p>
+            <p>{{ t.quiz.packageLabel }}</p>
             <div>
               <h2>{{ item.name }}</h2>
               <strong>{{ formatCurrency(item.price) }}</strong>
             </div>
             <p>{{ item.description }}</p>
-            <h3>Что входит</h3>
+            <h3>{{ t.quiz.includesTitle }}</h3>
             <ul>
               <li v-for="included in item.items" :key="included">{{ included }}</li>
             </ul>
@@ -446,8 +648,8 @@ const restartQuiz = () => {
         </div>
 
         <div class="quiz-result-actions">
-          <a href="/contacts">Получить точный расчёт</a>
-          <button type="button" @click="restartQuiz">Запросить свободную дату</button>
+          <a href="/contacts">{{ t.quiz.exactCalculation }}</a>
+          <button type="button" @click="restartQuiz">{{ t.quiz.requestDate }}</button>
         </div>
       </section>
     </main>
@@ -646,6 +848,11 @@ const restartQuiz = () => {
   font-family: var(--font-sans);
   font-size: 12px;
   outline: none;
+}
+
+.quiz-date-field,
+.quiz-date-field input {
+  cursor: pointer;
 }
 
 .quiz-date-field input,
@@ -1013,6 +1220,22 @@ const restartQuiz = () => {
   background: #43205c;
 }
 
+.quiz-image-option.is-selected .quiz-image-wrap::before {
+    opacity: .4;
+    visibility: visible;
+}
+
+.quiz-image-option .quiz-image-wrap::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    background: #e93c60;
+    opacity: 0;
+    visibility: hidden;
+}
+
 @media (min-width: 900px) {
   .quiz-start {
     display: grid;
@@ -1048,8 +1271,8 @@ const restartQuiz = () => {
   .quiz-start-content h1 {
     max-width: 520px;
     margin: 30px 0 0;
-    font-size: 46px;
-    line-height: 56px;
+    font-size: 39px;
+    line-height: 42px;
   }
 
   .quiz-start-content button {

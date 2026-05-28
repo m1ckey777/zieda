@@ -3,11 +3,13 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import pauseIconUrl from '../../../assets/pause-ic.svg'
 import playIconUrl from '../../../assets/play-ic.svg'
 import videoUrl from '../../../assets/decor-showcase.mp4'
+import { useLanguage } from '../../../composables/useLanguage'
 
 const videoRef = ref(null)
 const isVideoPaused = ref(true)
 const isVideoHovered = ref(false)
 const canHover = ref(true)
+const { t } = useLanguage()
 let hoverMediaQuery = null
 
 const updateCanHover = (event) => {
@@ -70,15 +72,15 @@ const toggleVideo = async () => {
     <div class="grid items-start gap-x-[48px] gap-y-[28px] min-[901px]:grid-cols-[360px_minmax(0,1fr)] max-[900px]:grid-cols-1">
       <div>
         <p class="m-0 mb-[5px] font-[var(--font-display)] text-[13px] font-normal uppercase leading-[20px] tracking-[-0.7px] text-[#22112E] max-[768px]:mb-0 max-[768px]:text-[16px] max-[768px]:leading-[20px] max-[768px]:tracking-[-0.32px]">
-          #BACKSTAGE
+          {{ t.eventDecor.video.eyebrow }}
         </p>
 
         <h2 class="m-0 [font-family:var(--font-display)] text-[32px] font-normal leading-[40px] tracking-[-0.7px] text-[#22112E] max-[768px]:mt-[8px] max-[768px]:text-[36px] max-[768px]:leading-[40px]">
-          Магия, которая остаётся за кадром
+          {{ t.eventDecor.video.title }}
         </h2>
 
         <p class="m-0 mt-[16px] max-w-[356px] font-[var(--font-sans)] text-[14px] font-normal leading-[24px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-[12px] max-[768px]:max-w-full max-[768px]:text-[16px] max-[768px]:leading-[27px]">
-          Короткое видео о том, как мы работаем: создаём, собираем и устанавливаем инсталляции любой сложности.
+          {{ t.eventDecor.video.text }}
         </p>
       </div>
 
@@ -106,7 +108,7 @@ const toggleVideo = async () => {
           @click="toggleVideo"
           class="absolute left-1/2 top-1/2 inline-flex h-[125px] w-[125px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] max-[768px]:h-[78px] max-[768px]:w-[78px]"
           :class="isVideoControlVisible ? 'opacity-100' : 'pointer-events-none opacity-0'"
-          :aria-label="isVideoPaused ? 'Воспроизвести backstage-видео' : 'Поставить backstage-видео на паузу'"
+          :aria-label="isVideoPaused ? t.eventDecor.video.playAria : t.eventDecor.video.pauseAria"
         >
           <span class="relative inline-flex h-[30px] w-[30px] items-center justify-center max-[768px]:h-[25px] max-[768px]:w-[25px]">
             <img
