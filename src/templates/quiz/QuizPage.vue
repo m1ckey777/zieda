@@ -1,17 +1,15 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
-import cartIconUrl from '../../assets/header-cart.svg'
 import checkIconUrl from '../../assets/quiz/quiz-check.svg'
+import SiteHeader from '../../components/shared/SiteHeader.vue'
 import corporateImageUrl from '../../assets/quiz/event-corporate.png'
 import decorHeroUrl from '../../assets/quiz/quiz-decor.png'
-import logoUrl from '../../assets/logo.svg'
 import otherImageUrl from '../../assets/quiz/event-other.png'
-import phoneIconUrl from '../../assets/header-phone.svg'
 import presentationImageUrl from '../../assets/quiz/event-presentation.png'
 import weddingImageUrl from '../../assets/quiz/event-wedding.png'
 import anniversaryImageUrl from '../../assets/quiz/event-anniversary.png'
 
-const phase = ref('start')
+const phase = ref('form')
 
 const answers = reactive({
   eventType: 'birthday',
@@ -143,9 +141,8 @@ const toggleArrayValue = (array, value) => {
   array.push(value)
 }
 
-const goToForm = () => {
-  phase.value = 'form'
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+const scrollToQuiz = () => {
+  document.querySelector('.quiz-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 const showResult = () => {
@@ -161,38 +158,19 @@ const restartQuiz = () => {
 
 <template>
   <div class="quiz-page">
-    <header class="quiz-header">
-      <a href="/" class="quiz-logo" aria-label="Zida Ziedi">
-        <img :src="logoUrl" alt="Zida Ziedi" />
-      </a>
-
-      <div class="quiz-header-actions">
-        <a href="/catalog" aria-label="Каталог">
-          <img :src="cartIconUrl" alt="" />
-        </a>
-        <a href="tel:+37100000000" aria-label="Позвонить">
-          <img :src="phoneIconUrl" alt="" />
-        </a>
-        <button type="button" aria-label="Открыть меню">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </header>
+    <SiteHeader />
 
     <main>
-      <section v-if="phase === 'start'" class="quiz-start">
+      <section v-if="phase === 'form'" class="quiz-start quiz-intro">
         <img :src="decorHeroUrl" alt="" class="quiz-start-decor" />
         <div class="quiz-start-content">
           <p>Всего за 1 минуту</p>
           <h1>Подберём декор и покажем ориентировочную смету</h1>
-          <button type="button" @click="goToForm">Начать</button>
+          <button type="button" @click="scrollToQuiz">Начать</button>
         </div>
-        <div class="quiz-next-card-hint"></div>
       </section>
 
-      <section v-else-if="phase === 'form'" class="quiz-form-card">
+      <section v-if="phase === 'form'" class="quiz-form-card">
         <div class="quiz-step">
           <div class="quiz-step-title">
             <span>1</span>
@@ -484,67 +462,6 @@ const restartQuiz = () => {
   color: #22112e;
 }
 
-.quiz-header {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  width: min(100% - 40px, 386px);
-  min-height: 58px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin: 48px auto 0;
-  padding: 10px 13px 10px 22px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 8px 28px rgba(34, 17, 46, 0.08);
-}
-
-.quiz-logo img {
-  display: block;
-  width: 128px;
-}
-
-.quiz-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.quiz-header-actions a {
-  display: inline-flex;
-  width: 19px;
-  height: 19px;
-  align-items: center;
-  justify-content: center;
-}
-
-.quiz-header-actions a img {
-  display: block;
-  width: 19px;
-  height: 19px;
-}
-
-.quiz-header-actions button {
-  display: inline-flex;
-  width: 42px;
-  height: 42px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  border: 0;
-  border-radius: 50%;
-  background: #e93c60;
-}
-
-.quiz-header-actions button span {
-  width: 16px;
-  height: 2px;
-  border-radius: 2px;
-  background: #fff;
-}
-
 .quiz-start {
   position: relative;
   width: min(100%, 430px);
@@ -613,15 +530,6 @@ const restartQuiz = () => {
 .quiz-start-content button {
   min-width: 200px;
   margin-top: 40px;
-}
-
-.quiz-next-card-hint {
-  width: min(100% - 70px, 360px);
-  height: 94px;
-  margin: 92px auto 0;
-  border-radius: 24px 24px 0 0;
-  background: #fff;
-  box-shadow: 0 -10px 28px rgba(34, 17, 46, 0.08);
 }
 
 .quiz-form-card,
@@ -1103,6 +1011,158 @@ const restartQuiz = () => {
 
 .quiz-result-actions button {
   background: #43205c;
+}
+
+@media (min-width: 900px) {
+  .quiz-start {
+    display: grid;
+    width: min(100% - 64px, 1120px);
+    min-height: auto;
+    grid-template-columns: minmax(360px, 0.86fr) minmax(420px, 1fr);
+    gap: 28px 54px;
+    align-items: center;
+    padding: 54px 0 70px;
+    text-align: left;
+  }
+
+  .quiz-start-decor {
+    grid-column: 2;
+    grid-row: 1;
+    width: min(100%, 480px);
+    margin: 0;
+    transform: none;
+  }
+
+  .quiz-start-content {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    margin: 0;
+  }
+
+  .quiz-start-content p {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .quiz-start-content h1 {
+    max-width: 520px;
+    margin: 30px 0 0;
+    font-size: 46px;
+    line-height: 56px;
+  }
+
+  .quiz-start-content button {
+    min-width: 228px;
+    margin-top: 38px;
+  }
+
+  .quiz-form-card {
+    display: grid;
+    width: min(100% - 64px, 1040px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: hidden;
+  }
+
+  .quiz-result {
+    width: min(100% - 64px, 1040px);
+  }
+
+  .quiz-step {
+    min-width: 0;
+    padding: 30px;
+    border-right: 1px dashed rgba(34, 17, 46, 0.08);
+  }
+
+  .quiz-step:nth-child(2n),
+  .quiz-step-last {
+    border-right: 0;
+  }
+
+  .quiz-step:nth-last-child(2) {
+    border-bottom: 0;
+  }
+
+  .quiz-step-last {
+    grid-column: 1 / -1;
+    padding: 34px 30px 36px;
+  }
+
+  .quiz-step-last .quiz-contact-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .quiz-step-last .quiz-channel-grid {
+    max-width: 520px;
+  }
+
+  .quiz-step-title h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .quiz-image-grid,
+  .quiz-placeholder-grid {
+    gap: 18px 14px;
+  }
+
+  .quiz-placeholder-grid button span {
+    aspect-ratio: 1.12;
+  }
+
+  .quiz-button-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .quiz-stack-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quiz-palette-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quiz-textarea-label textarea {
+    height: 150px;
+  }
+
+  .quiz-submit-button {
+    max-width: 360px;
+  }
+
+  .quiz-result-summary {
+    padding: 42px 46px;
+  }
+
+  .quiz-result-summary h1 {
+    font-size: 46px;
+    line-height: 56px;
+  }
+
+  .quiz-result-summary dl {
+    grid-template-columns: 220px minmax(0, 1fr) 220px minmax(0, 1fr);
+    gap: 18px 24px;
+  }
+
+  .quiz-result-summary dd {
+    text-align: left;
+  }
+
+  .quiz-package-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .quiz-package {
+    min-width: 0;
+    padding: 30px;
+  }
+
+  .quiz-result-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 380px) {
