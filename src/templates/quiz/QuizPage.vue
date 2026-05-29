@@ -13,30 +13,31 @@ import anniversaryImageUrl from '../../assets/quiz/event-anniversary.png'
 import { useLanguage } from '../../composables/useLanguage'
 import { withBaseHref } from '../../utils/links'
 
-const { t } = useLanguage()
+const { currentLanguage, t } = useLanguage()
 const phase = ref('form')
 const dateInputRef = ref(null)
 const phoneInputRef = ref(null)
 const latestSubmission = ref(null)
+const validationAttempted = ref(false)
 let itiInstance = null
 
 const answers = reactive({
-  eventType: 'birthday',
+  eventType: '',
   date: '',
-  venue: 'outdoor',
-  guests: 'from50to100',
-  decorate: ['welcome', 'main-table', 'photozone'],
+  venue: '',
+  guests: '',
+  decorate: [],
   decorateOther: '',
-  style: 'modern',
-  fullness: 3,
-  palette: 'brand',
-  flowerType: 'mix',
+  style: '',
+  fullness: 0,
+  palette: '',
+  flowerType: '',
   services: [],
-  timeWindow: 'day',
-  budget: 'medium',
+  timeWindow: '',
+  budget: '',
   restrictions: '',
   documents: false,
-  name: 'Aleksandr',
+  name: '',
   phone: '',
   email: '',
   channels: [],
@@ -201,7 +202,11 @@ const selectedBudgetLabel = computed(() => budgetOptions.value.find((item) => it
 const selectedDecorLabels = computed(() => decorateOptions.value.filter((item) => answers.decorate.includes(item.value)).map((item) => item.label))
 const selectedServiceLabels = computed(() => serviceOptions.value.filter((item) => answers.services.includes(item.value)).map((item) => item.label))
 const selectedChannelLabels = computed(() => channelOptions.value.filter((item) => answers.channels.includes(item.value)).map((item) => item.label))
-const fullnessLabel = computed(() => fullnessLabels.value[answers.fullness - 1] ?? fullnessLabels.value[0])
+const fullnessLabel = computed(() => {
+  if (!answers.fullness) return t.value.quiz.notSelected
+
+  return fullnessLabels.value[answers.fullness - 1] ?? t.value.quiz.notSelected
+})
 const formattedDate = computed(() => {
   if (!answers.date) return t.value.quiz.dateNotSelected
 
@@ -212,6 +217,37 @@ const contactSummary = computed(() => {
   const parts = [answers.name, answers.phone, answers.email].filter(Boolean)
   return parts.join(' / ') || t.value.quiz.contactEmpty
 })
+
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+
+const validationMessage = computed(() => (
+  currentLanguage.value === 'RU'
+    ? 'Заполните обязательные поля, чтобы получить расчет.'
+    : 'Aizpildiet obligātos laukus, lai saņemtu aprēķinu.'
+))
+
+const validationMap = computed(() => ({
+  eventType: Boolean(answers.eventType),
+  date: Boolean(answers.date),
+  venue: Boolean(answers.venue),
+  guests: Boolean(answers.guests),
+  decorate: answers.decorate.length > 0,
+  style: Boolean(answers.style),
+  fullness: answers.fullness > 0,
+  palette: Boolean(answers.palette),
+  flowerType: Boolean(answers.flowerType),
+  services: answers.services.length > 0,
+  timeWindow: Boolean(answers.timeWindow),
+  budget: Boolean(answers.budget),
+  name: Boolean(answers.name.trim()),
+  phone: Boolean(answers.phone.trim()),
+  email: isValidEmail(answers.email),
+  channels: answers.channels.length > 0,
+}))
+
+const invalidFields = computed(() => Object.entries(validationMap.value).filter(([, isValid]) => !isValid).map(([field]) => field))
+const hasError = (field) => validationAttempted.value && !validationMap.value[field]
+const stepHasError = (...fields) => validationAttempted.value && fields.some((field) => !validationMap.value[field])
 
 const roundTo50 = (value) => Math.max(0, Math.round(value / 50) * 50)
 
@@ -228,7 +264,7 @@ const estimate = computed(() => {
     (paletteAdjustments[answers.palette] ?? 0) +
     (flowerTypeAdjustments[answers.flowerType] ?? 0)
 
-  const fullnessScope = 1 + (answers.fullness - 3) * 0.12
+  const fullnessScope = 1 + ((answers.fullness || 3) - 3) * 0.12
   const styleScope = styleMultipliers[answers.style] ?? 1
   const scopedPrice = Math.max(0, baseScope * fullnessScope * styleScope)
   const lower = roundTo50(baseRange[0] + scopedPrice * 0.38)
@@ -335,6 +371,17 @@ const bindPhoneInput = () => {
 
 const showResult = () => {
   syncPhoneValue()
+
+  validationAttempted.value = true
+
+  if (invalidFields.value.length) {
+    requestAnimationFrame(() => {
+      document.querySelector('.quiz-step.is-invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+
+    return
+  }
+
   latestSubmission.value = quizSubmission.value
   destroyPhoneInput()
   phase.value = 'result'
@@ -343,6 +390,7 @@ const showResult = () => {
 
 const restartQuiz = () => {
   phase.value = 'form'
+  validationAttempted.value = false
   window.scrollTo({ top: 0, behavior: 'smooth' })
 
   requestAnimationFrame(() => {
@@ -374,7 +422,7 @@ onBeforeUnmount(() => {
       </section>
 
       <section v-if="phase === 'form'" v-reveal="{ variant: 'scale' }" class="quiz-form-card">
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('eventType') }">
           <div class="quiz-step-title">
             <span>1</span>
             <h2>{{ t.quiz.steps.eventType }}</h2>
@@ -398,7 +446,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('date', 'venue') }">
           <div class="quiz-step-title">
             <span>2</span>
             <h2>{{ t.quiz.steps.venue }}</h2>
@@ -421,7 +469,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('guests') }">
           <div class="quiz-step-title">
             <span>3</span>
             <h2>{{ t.quiz.steps.guests }}</h2>
@@ -439,7 +487,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('decorate') }">
           <div class="quiz-step-title">
             <span>4</span>
             <h2>{{ t.quiz.steps.decorate }}</h2>
@@ -461,7 +509,7 @@ onBeforeUnmount(() => {
           <input v-model="answers.decorateOther" class="quiz-text-input" type="text" :placeholder="t.quiz.otherPlaceholder" />
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('style', 'fullness') }">
           <div class="quiz-step-title">
             <span>5</span>
             <h2>{{ t.quiz.steps.style }}</h2>
@@ -491,7 +539,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('palette') }">
           <div class="quiz-step-title">
             <span>6</span>
             <h2>{{ t.quiz.steps.palette }}</h2>
@@ -512,7 +560,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('flowerType') }">
           <div class="quiz-step-title">
             <span>7</span>
             <h2>{{ t.quiz.steps.flowers }}</h2>
@@ -535,7 +583,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('services', 'timeWindow') }">
           <div class="quiz-step-title">
             <span>8</span>
             <h2>{{ t.quiz.steps.services }}</h2>
@@ -564,7 +612,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div v-reveal class="quiz-step">
+        <div v-reveal class="quiz-step" :class="{ 'is-invalid': stepHasError('budget') }">
           <div class="quiz-step-title">
             <span>9</span>
             <h2>{{ t.quiz.steps.budget }}</h2>
@@ -597,7 +645,7 @@ onBeforeUnmount(() => {
           </label>
         </div>
 
-        <div v-reveal class="quiz-step quiz-step-last">
+        <div v-reveal class="quiz-step quiz-step-last" :class="{ 'is-invalid': stepHasError('name', 'phone', 'email', 'channels') }">
           <div class="quiz-step-title">
             <span>11</span>
             <h2>{{ t.quiz.steps.contacts }}</h2>
@@ -619,6 +667,9 @@ onBeforeUnmount(() => {
             </label>
           </div>
           <input v-model="answers.reference" class="quiz-text-input" type="text" :placeholder="t.quiz.referencePlaceholder" />
+          <p v-if="validationAttempted && invalidFields.length" class="quiz-validation-message">
+            {{ validationMessage }}
+          </p>
           <button type="button" class="quiz-submit-button" @click="showResult">{{ t.quiz.submit }}</button>
         </div>
       </section>
@@ -753,6 +804,14 @@ onBeforeUnmount(() => {
 .quiz-step {
   padding: 22px 18px;
   border-bottom: 1px dashed rgba(34, 17, 46, 0.08);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.quiz-step.is-invalid {
+  background: #fff8fa;
+  box-shadow: inset 3px 0 0 rgba(233, 60, 96, 0.7);
 }
 
 .quiz-step-last {
@@ -779,6 +838,11 @@ onBeforeUnmount(() => {
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
+}
+
+.quiz-step.is-invalid .quiz-step-title span {
+  background: #e93c60;
+  color: #fff;
 }
 
 .quiz-step-title h2 {
@@ -1093,6 +1157,13 @@ onBeforeUnmount(() => {
   margin-top: 22px;
   border: 0;
   box-shadow: none;
+}
+
+.quiz-validation-message {
+  margin: 18px 0 0;
+  color: #e93c60;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .quiz-result {
