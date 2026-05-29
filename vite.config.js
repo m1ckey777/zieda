@@ -4,5 +4,6 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.GITHUB_PAGES ? '/zieda/' : '/',
   plugins: [vue(), VueDevTools()],
 })

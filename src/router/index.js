@@ -9,7 +9,7 @@ import ProductPage from '../pages/ProductPage.vue'
 import QuizPage from '../pages/QuizPage.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
