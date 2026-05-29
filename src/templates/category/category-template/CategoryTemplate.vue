@@ -5,6 +5,7 @@ import SiteFooter from '../../../components/shared/SiteFooter.vue'
 import SiteHeader from '../../../components/shared/SiteHeader.vue'
 import productImageUrl from '../../../assets/product-page/product-jpg.jpg'
 import { useLanguage } from '../../../composables/useLanguage'
+import { withBaseHref } from '../../../utils/links'
 
 const { t } = useLanguage()
 const categoryOptions = computed(() => t.value.catalog.categories)
@@ -299,7 +300,7 @@ const resetFilters = () => {
             :data-price="product.price"
             :data-popularity="product.popularity"
           >
-            <a :href="product.href" class="catalog-card-image-link motion-image-wrap" :aria-label="product.title">
+            <a :href="withBaseHref(product.href)" class="catalog-card-image-link motion-image-wrap" :aria-label="product.title">
               <img :src="productImageUrl" :alt="product.title" class="catalog-card-image motion-image" loading="lazy" />
               <span v-if="product.badge" class="catalog-card-badge">{{ product.badge }}</span>
             </a>
@@ -307,7 +308,7 @@ const resetFilters = () => {
             <div class="catalog-card-body">
               <p class="catalog-card-meta">{{ product.article }} - {{ product.size }}</p>
               <h2 class="catalog-card-title">
-                <a :href="product.href">{{ product.title }}</a>
+                <a :href="withBaseHref(product.href)">{{ product.title }}</a>
               </h2>
 
               <div class="catalog-card-footer">
@@ -316,7 +317,7 @@ const resetFilters = () => {
                   <span>{{ product.oldPrice }}€</span>
                 </p>
 
-                <a :href="product.href" class="catalog-card-link" :aria-label="`${t.catalog.productLink} ${product.title}`">
+                <a :href="withBaseHref(product.href)" class="catalog-card-link" :aria-label="`${t.catalog.productLink} ${product.title}`">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M4 7.5H11M8.25 4.75L11 7.5L8.25 10.25" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>

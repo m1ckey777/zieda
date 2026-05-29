@@ -1,4 +1,7 @@
 ﻿<script setup>
+import { computed } from 'vue'
+import { withBaseHref } from '../../utils/links'
+
 const props = defineProps({
   label: {
     type: String,
@@ -25,12 +28,14 @@ const variantClasses = {
   primary: 'border-transparent bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)]',
   secondary: 'border-[var(--color-primary)] bg-transparent text-[var(--color-primary)]',
 }
+
+const resolvedHref = computed(() => withBaseHref(props.href))
 </script>
 
 <template>
   <a
     v-if="href"
-    :href="href"
+    :href="resolvedHref"
     :class="[baseClasses, variantClasses[variant] ?? variantClasses.primary, block && 'w-full']"
   >
     <span>{{ label }}</span>

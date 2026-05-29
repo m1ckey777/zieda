@@ -3,6 +3,7 @@ import catalogHeroUrl from '../../assets/catalog-hero.png'
 import downloadHeroIconUrl from '../../assets/dwn-hero-ic.svg'
 import heroImageUrl from '../../assets/hero-img.png'
 import { useLanguage } from '../../composables/useLanguage'
+import { withBaseHref } from '../../utils/links'
 
 const { t } = useLanguage()
 </script>
@@ -21,7 +22,7 @@ const { t } = useLanguage()
 
         <div class="mt-8 flex max-w-[460px] flex-wrap gap-5 max-[768px]:mt-5 max-[768px]:grid max-[768px]:grid-cols-2 max-[768px]:gap-3">
           <a
-            href="/catalog"
+            :href="withBaseHref('/catalog')"
             class="motion-button inline-flex min-h-[56px] w-[calc(50%-10px)] items-center justify-center rounded-full bg-[var(--color-primary)] [font-family:var(--font-display)] text-[13px] uppercase leading-[22px] text-white transition duration-200 hover:-translate-y-px hover:bg-[var(--color-primary-dark)] max-[768px]:min-h-[44px] max-[768px]:w-full max-[768px]:px-3 max-[768px]:text-[11px] max-[768px]:leading-[1]"
           >
             {{ t.home.hero.catalog }}

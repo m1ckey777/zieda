@@ -8,6 +8,15 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      ;((location) => {
+        if (!location.search.startsWith('?/')) return
+
+        const [path, query] = location.search.slice(2).replace(/~and~/g, '&').split('&')
+
+        window.history.replaceState(null, '', `${location.pathname}${path}${query ? `?${query}` : ''}${location.hash}`)
+      })(window.location)
+    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

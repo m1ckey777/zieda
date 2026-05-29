@@ -4,6 +4,7 @@ import cartIconUrl from '../../assets/header-cart.svg'
 import logoUrl from '../../assets/logo.svg'
 import phoneIconUrl from '../../assets/header-phone.svg'
 import { useLanguage } from '../../composables/useLanguage'
+import { withBaseHref } from '../../utils/links'
 import UiButton from './UiButton.vue'
 
 const { currentLanguage, languages, setLanguage, t } = useLanguage()
@@ -87,7 +88,7 @@ onBeforeUnmount(() => {
           :class="{ 'max-[980px]:shadow-none': isMobileMenuOpen }"
         >
         <div class="flex items-center justify-between gap-6 px-5 py-[15px] max-[768px]:gap-3 max-[768px]:px-4 max-[768px]:py-3">
-          <a href="/" class="inline-flex items-center" aria-label="Zida Ziedi">
+          <a :href="withBaseHref('/')" class="inline-flex items-center" aria-label="Zida Ziedi">
             <img :src="logoUrl" alt="Zida Ziedi" class="block h-auto w-[178px] max-[768px]:w-[120px]" />
           </a>
 
@@ -95,7 +96,7 @@ onBeforeUnmount(() => {
             <a
               v-for="item in desktopNavItems"
               :key="item.label"
-              :href="item.href"
+              :href="withBaseHref(item.href)"
               class="motion-link text-[14px] leading-[21px] text-[#333] transition-colors duration-200 hover:text-[var(--color-primary)]"
             >
               {{ item.label }}
@@ -220,7 +221,7 @@ onBeforeUnmount(() => {
                 <a
                   v-for="item in mobileNavItems"
                   :key="item.label"
-                  :href="item.href"
+                  :href="withBaseHref(item.href)"
                   class="font-[var(--font-display)] text-[20px] font-normal leading-none text-[var(--color-heading)] transition-colors duration-200 hover:text-[var(--color-primary)]"
                   @click="closeAllMenus"
                 >

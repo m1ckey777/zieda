@@ -4,6 +4,7 @@ import serviceImage1Url from '../../assets/service-1.jpg'
 import serviceImage2Url from '../../assets/service-2.jpg'
 import serviceImage3Url from '../../assets/service-3.jpg'
 import { useLanguage } from '../../composables/useLanguage'
+import { withBaseHref } from '../../utils/links'
 
 const { t } = useLanguage()
 const serviceImages = [serviceImage1Url, serviceImage2Url, serviceImage3Url]
@@ -39,7 +40,7 @@ const serviceCards = computed(() => t.value.home.services.cards.map((card, index
             {{ card.text }}
           </p>
           <a
-            :href="card.href"
+            :href="withBaseHref(card.href)"
             class="motion-link mt-6 block border-b border-[var(--color-primary)] text-[14px] font-semibold leading-6 text-[var(--color-primary)] transition duration-200 hover:text-[var(--color-primary-dark)] hover:border-[var(--color-primary-dark)] max-[768px]:mt-[10px] max-[768px]:inline-flex max-[768px]:w-fit max-[768px]:items-center max-[768px]:gap-2 max-[768px]:py-[8px] max-[768px]:text-center max-[768px]:font-[var(--font-sans)] max-[768px]:text-[14px] max-[768px]:font-bold max-[768px]:leading-[14.041px]"
           >
             <span>{{ t.home.services.details }}</span>

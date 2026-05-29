@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zida Ziedi</title>
+    <script>
+      ;((location) => {
+        const repo = 'zieda'
+        const pathParts = location.pathname.split('/').filter(Boolean)
+        const repoIndex = pathParts.indexOf(repo)
+        const route = repoIndex >= 0 ? pathParts.slice(repoIndex + 1).join('/') : pathParts.join('/')
+        const query = location.search ? `&${location.search.slice(1).replace(/&/g, '~and~')}` : ''
+
+        location.replace(`${location.origin}/${repo}/?/${route}${query}${location.hash}`)
+      })(window.location)
+    </script>
+  </head>
+  <body></body>
+</html>

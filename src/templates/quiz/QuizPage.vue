@@ -11,6 +11,7 @@ import presentationImageUrl from '../../assets/quiz/event-presentation.png'
 import weddingImageUrl from '../../assets/quiz/event-wedding.png'
 import anniversaryImageUrl from '../../assets/quiz/event-anniversary.png'
 import { useLanguage } from '../../composables/useLanguage'
+import { withBaseHref } from '../../utils/links'
 
 const { t } = useLanguage()
 const phase = ref('form')
@@ -650,7 +651,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="quiz-result-actions">
-          <a href="/contacts">{{ t.quiz.exactCalculation }}</a>
+          <a :href="withBaseHref('/contacts')">{{ t.quiz.exactCalculation }}</a>
           <button type="button" @click="restartQuiz">{{ t.quiz.requestDate }}</button>
         </div>
       </section>

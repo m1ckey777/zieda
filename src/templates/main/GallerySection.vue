@@ -1,6 +1,7 @@
 ﻿<script setup>
 import { ref } from 'vue'
 import { useLanguage } from '../../composables/useLanguage'
+import { withBaseHref } from '../../utils/links'
 
 const selectedGalleryImage = ref('')
 const { t } = useLanguage()
@@ -68,7 +69,7 @@ const closeGalleryImage = () => {
 
     <div class="mt-10 flex justify-center max-[768px]:mt-[30px]">
       <a
-        href="/portfolio"
+        :href="withBaseHref('/portfolio')"
         class="motion-button inline-flex min-h-[54px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-[var(--color-primary)] px-[48px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-white transition duration-200 hover:bg-[var(--color-primary-dark)] hover:border-[var(--color-primary-dark)] max-[768px]:w-full max-[768px]:px-8"
       >
         {{ t.home.gallery.cta }}
