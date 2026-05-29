@@ -14,7 +14,7 @@ const { t } = useLanguage()
     class="py-[50px] max-[768px]:pt-[30px] max-[768px]:pb-[45px]"
   >
     <div class="mx-auto grid w-[min(1200px,calc(100%-40px))] items-start gap-x-[48px] min-[1025px]:grid-cols-[minmax(0,1fr)_405px] max-[1024px]:gap-x-[32px] max-[900px]:grid-cols-1 max-[900px]:gap-y-[34px] max-[768px]:w-[min(1200px,calc(100%-32px))]">
-      <div>
+      <div v-reveal>
         <h2 class="m-0 mb-[16px] max-w-[630px] [font-family:var(--font-display)] text-[32px] font-normal leading-10 tracking-[-0.7px] text-[var(--color-heading)] max-[768px]:max-w-[360px] max-[768px]:text-[30px] max-[768px]:leading-[1.15]">
           {{ t.b2b.capabilities.title }}
         </h2>
@@ -31,8 +31,9 @@ const { t } = useLanguage()
 
         <div class="mt-[34px] grid gap-x-[45px] gap-y-[36px] min-[768px]:grid-cols-2 max-[768px]:mt-[30px] max-[768px]:grid-cols-1 max-[768px]:gap-y-[24px]">
           <article
-            v-for="item in t.b2b.capabilities.items"
+            v-for="(item, index) in t.b2b.capabilities.items"
             :key="item.number"
+            v-reveal="{ delay: index * 80 }"
             class="grid items-center gap-x-[18px] gap-y-[10px]"
             :class="item.number === '01' ? 'grid-cols-[44px_minmax(0,1fr)]' : 'grid-cols-[55px_minmax(0,1fr)]'"
           >
@@ -51,7 +52,7 @@ const { t } = useLanguage()
         </div>
       </div>
 
-      <div class="grid grid-cols-[minmax(0,1fr)_152px] gap-[18px] max-[900px]:mx-auto max-[900px]:w-full max-[900px]:max-w-[405px] max-[768px]:grid-cols-[minmax(0,1fr)_41.7%]">
+      <div v-reveal="{ delay: 140, variant: 'image' }" class="grid grid-cols-[minmax(0,1fr)_152px] gap-[18px] max-[900px]:mx-auto max-[900px]:w-full max-[900px]:max-w-[405px] max-[768px]:grid-cols-[minmax(0,1fr)_41.7%]">
         <img
           :src="capabilitiesImage1Url"
           :alt="t.b2b.capabilities.imageAlts[0]"

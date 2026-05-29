@@ -65,7 +65,7 @@ const toggleVideo = async () => {
 </script>
 
 <template>
-  <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[46px] pb-[92px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-0 max-[768px]:pb-0">
+  <section v-reveal="{ variant: 'scale' }" class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[46px] pb-[92px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-0 max-[768px]:pb-0">
     <div
       class="group relative overflow-hidden rounded-[28px] max-[768px]:rounded-[20px]"
       @mouseenter="isVideoHovered = true"
@@ -74,7 +74,7 @@ const toggleVideo = async () => {
       <video
         ref="videoRef"
         :src="videoUrl"
-        class="block h-[610px] w-full object-cover max-[768px]:h-[285px]"
+        class="block h-[610px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.015] max-[768px]:h-[285px]"
         muted
         loop
         preload="metadata"
@@ -86,7 +86,7 @@ const toggleVideo = async () => {
       <button
         type="button"
         @click="toggleVideo"
-        class="absolute left-1/2 top-1/2 inline-flex h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] max-[768px]:h-[72px] max-[768px]:w-[72px]"
+        class="absolute left-1/2 top-1/2 inline-flex h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.04] hover:bg-white/70 max-[768px]:h-[72px] max-[768px]:w-[72px]"
         :class="isVideoControlVisible ? 'opacity-100' : 'pointer-events-none opacity-0'"
         :aria-label="isVideoPaused ? t.home.video.playAria : t.home.video.pauseAria"
       >

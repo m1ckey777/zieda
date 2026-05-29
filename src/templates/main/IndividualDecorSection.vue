@@ -6,12 +6,12 @@ const { t } = useLanguage()
 </script>
 
 <template>
-  <section class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-full max-[768px]:pb-0">
-    <div class="relative overflow-hidden rounded-[42px] max-[768px]:rounded-none">
+  <section v-reveal="{ variant: 'scale' }" class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-full max-[768px]:pb-0">
+    <div class="motion-image-wrap relative overflow-hidden rounded-[42px] max-[768px]:rounded-none">
       <img
         :src="individBgUrl"
         :alt="t.home.individual.imageAlt"
-        class="absolute inset-0 h-full w-full object-cover"
+        class="motion-image absolute inset-0 h-full w-full object-cover"
       />
       <div class="absolute inset-0 bg-black/55 max-[768px]:bg-black/50"></div>
 
@@ -31,7 +31,7 @@ const { t } = useLanguage()
 
         <a
           href="#contact"
-          class="mt-12 inline-flex min-h-[58px] items-center justify-center rounded-[555px] bg-[var(--color-primary)] px-[66px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-white transition duration-200 hover:bg-[var(--color-primary-dark)] max-[768px]:mt-[42px] max-[768px]:w-full max-[768px]:max-w-[375px] max-[768px]:px-6 max-[768px]:py-[17px] max-[768px]:text-[17px] max-[768px]:leading-[22px] max-[768px]:tracking-[-0.34px]"
+          class="motion-button mt-12 inline-flex min-h-[58px] items-center justify-center rounded-[555px] bg-[var(--color-primary)] px-[66px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-white transition duration-200 hover:bg-[var(--color-primary-dark)] max-[768px]:mt-[42px] max-[768px]:w-full max-[768px]:max-w-[375px] max-[768px]:px-6 max-[768px]:py-[17px] max-[768px]:text-[17px] max-[768px]:leading-[22px] max-[768px]:tracking-[-0.34px]"
         >
           {{ t.home.individual.cta }}
         </a>

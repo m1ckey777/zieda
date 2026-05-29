@@ -69,6 +69,7 @@ const toggleVideo = async () => {
 <template>
   <section
     id="b2b-hero"
+    v-reveal="{ variant: 'fade', threshold: 0.05 }"
     class="w-full"
   >
     <div
@@ -83,7 +84,7 @@ const toggleVideo = async () => {
 
       <div class="relative z-[1] mx-auto w-[min(1200px,calc(100%-40px))] pt-[100px] pb-[110px] max-[1200px]:pt-[88px] max-[1200px]:pb-[96px] max-[1024px]:pt-[72px] max-[1024px]:pb-[78px] max-[900px]:pt-[56px] max-[900px]:pb-[60px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[118px] max-[768px]:pb-[34px]">
         <div class="grid items-start gap-x-[56px] gap-y-10 min-[1025px]:grid-cols-[minmax(0,1fr)_500px] max-[1024px]:grid-cols-[minmax(0,1fr)_420px] max-[900px]:grid-cols-1 max-[900px]:gap-y-7">
-          <div class="max-w-[560px] max-[900px]:max-w-full">
+          <div v-reveal="{ delay: 80 }" class="max-w-[560px] max-[900px]:max-w-full">
             <p class="m-0 hidden font-[var(--font-sans)] text-[13px] uppercase leading-[1.4] tracking-[0.08em] text-[#d95a83] max-[768px]:block">
               {{ t.b2b.hero.eyebrow }}
             </p>
@@ -106,6 +107,7 @@ const toggleVideo = async () => {
           </div>
 
           <div
+            v-reveal="{ delay: 180, variant: 'scale' }"
             class="group relative ml-auto mt-[5px] h-[315px] w-[500px] overflow-hidden rounded-[12px] border-[3px] border-white/20 bg-white/6 shadow-[0_20px_60px_rgba(0,0,0,0.28)] max-[900px]:mx-auto max-[900px]:h-auto max-[900px]:w-full max-[900px]:max-w-full max-[768px]:order-3 max-[768px]:rounded-[22px] max-[768px]:border-white/15"
             @mouseenter="isVideoHovered = true"
             @mouseleave="isVideoHovered = false"
@@ -113,7 +115,7 @@ const toggleVideo = async () => {
             <video
               ref="videoRef"
               :src="videoUrl"
-              class="block h-[315px] w-[500px] object-cover max-[900px]:h-auto max-[900px]:w-full max-[768px]:aspect-[1.42/1] max-[768px]:min-h-[230px]"
+              class="block h-[315px] w-[500px] object-cover transition-transform duration-700 group-hover:scale-[1.015] max-[900px]:h-auto max-[900px]:w-full max-[768px]:aspect-[1.42/1] max-[768px]:min-h-[230px]"
               muted
               loop
               preload="metadata"
@@ -127,7 +129,7 @@ const toggleVideo = async () => {
             <button
               type="button"
               @click="toggleVideo"
-              class="absolute left-1/2 top-1/2 inline-flex h-[91px] w-[91px] -translate-x-1/2 -translate-y-[58px] items-center justify-center rounded-full bg-white shadow-[0_10px_40px_rgba(0,0,0,0.22)] transition-all duration-300 hover:scale-[1.02] max-[768px]:h-[84px] max-[768px]:w-[84px] max-[768px]:-translate-y-[52px]"
+              class="absolute left-1/2 top-1/2 inline-flex h-[91px] w-[91px] -translate-x-1/2 -translate-y-[58px] items-center justify-center rounded-full bg-white shadow-[0_10px_40px_rgba(0,0,0,0.22)] transition-all duration-300 hover:scale-[1.05] max-[768px]:h-[84px] max-[768px]:w-[84px] max-[768px]:-translate-y-[52px]"
               :class="isVideoControlVisible ? 'opacity-100' : 'pointer-events-none opacity-0'"
               :aria-label="isVideoPaused ? t.b2b.hero.videoPlayAria : t.b2b.hero.videoPauseAria"
             >

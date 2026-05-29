@@ -214,11 +214,13 @@ const resetFilters = () => {
 
     <main class="catalog-main">
       <section class="catalog-template">
-        <p class="catalog-eyebrow">{{ t.catalog.eyebrow }}</p>
-        <h1 class="catalog-title">{{ t.catalog.title }}</h1>
+        <div v-reveal>
+          <p class="catalog-eyebrow">{{ t.catalog.eyebrow }}</p>
+          <h1 class="catalog-title">{{ t.catalog.title }}</h1>
+        </div>
 
         <div class="catalog-layout">
-          <aside class="catalog-sidebar" :aria-label="t.catalog.sidebarAria">
+          <aside v-reveal="{ delay: 80, variant: 'scale' }" class="catalog-sidebar" :aria-label="t.catalog.sidebarAria">
             <div class="catalog-sidebar-block">
               <h2>{{ t.catalog.filterTitle }}</h2>
               <div class="catalog-sidebar-options">
@@ -287,17 +289,18 @@ const resetFilters = () => {
 
         <div class="catalog-grid">
           <article
-            v-for="product in visibleProducts"
+            v-for="(product, index) in visibleProducts"
             :key="product.id"
             class="catalog-card"
             :class="[`category-${product.category}`]"
+            v-reveal="{ delay: (index % 8) * 45, variant: 'scale' }"
             :data-product-id="product.id"
             :data-category="product.category"
             :data-price="product.price"
             :data-popularity="product.popularity"
           >
-            <a :href="product.href" class="catalog-card-image-link" :aria-label="product.title">
-              <img :src="productImageUrl" :alt="product.title" class="catalog-card-image" />
+            <a :href="product.href" class="catalog-card-image-link motion-image-wrap" :aria-label="product.title">
+              <img :src="productImageUrl" :alt="product.title" class="catalog-card-image motion-image" loading="lazy" />
               <span v-if="product.badge" class="catalog-card-badge">{{ product.badge }}</span>
             </a>
 
@@ -326,7 +329,7 @@ const resetFilters = () => {
         <button
           v-if="hasMoreProducts"
           type="button"
-          class="catalog-more-button"
+          class="catalog-more-button motion-button"
           @click="showMoreProducts"
         >
           {{ t.catalog.showMore }}
@@ -359,7 +362,7 @@ const resetFilters = () => {
 
 .catalog-template {
   width: min(100% - 32px, 390px);
-  margin: 0 auto;
+  margin: 0 auto 50px;
 }
 
 .catalog-eyebrow {
@@ -427,6 +430,12 @@ const resetFilters = () => {
   border-radius: 999px;
   background: #fff;
   color: var(--color-heading);
+  transition:
+    transform 0.24s ease,
+    border-color 0.24s ease,
+    background-color 0.24s ease,
+    color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .catalog-grid {
@@ -438,6 +447,9 @@ const resetFilters = () => {
 
 .catalog-card {
   min-width: 0;
+  transition:
+    transform 0.28s ease,
+    filter 0.28s ease;
 }
 
 .catalog-card-image-link {
@@ -448,6 +460,9 @@ const resetFilters = () => {
   border-radius: 6px;
   background: #eee8e2;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 0.24s ease,
+    box-shadow 0.28s ease;
 }
 
 .catalog-card-image {
@@ -456,6 +471,7 @@ const resetFilters = () => {
   aspect-ratio: 160 / 166;
   border-radius: 2px;
   object-fit: cover;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .catalog-card-badge {
@@ -534,6 +550,10 @@ const resetFilters = () => {
   border-radius: 27px;
   background: #E93C60;
   color: #fff;
+  transition:
+    transform 0.24s ease,
+    background-color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .catalog-more-button {
@@ -551,6 +571,47 @@ const resetFilters = () => {
   font-size: 11px;
   line-height: 16px;
   text-transform: uppercase;
+  transition:
+    transform 0.24s ease,
+    background-color 0.24s ease,
+    color 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-sort-button:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(233, 60, 96, 0.16);
+  }
+
+  .catalog-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .catalog-card:hover .catalog-card-image-link {
+    border-color: rgba(233, 60, 96, 0.32);
+    box-shadow: 0 18px 38px rgba(34, 17, 46, 0.14);
+  }
+
+  .catalog-card:hover .catalog-card-image {
+    transform: scale(1.045);
+  }
+
+  .catalog-card-link:hover {
+    transform: translateX(2px);
+    background: var(--color-primary-dark);
+    box-shadow: 0 12px 22px rgba(233, 60, 96, 0.2);
+  }
+
+  .catalog-more-button:hover {
+    transform: translateY(-2px);
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(233, 60, 96, 0.16);
+  }
 }
 
 @media (min-width: 700px) {
@@ -631,6 +692,12 @@ const resetFilters = () => {
     font-size: 12px;
     line-height: 18px;
     text-transform: uppercase;
+    transition:
+      transform 0.24s ease,
+      border-color 0.24s ease,
+      background-color 0.24s ease,
+      color 0.24s ease,
+      box-shadow 0.24s ease;
   }
 
   .catalog-reset-button {
@@ -645,6 +712,30 @@ const resetFilters = () => {
     margin-top: 12px;
     padding: 0 16px;
     text-align: left;
+  }
+
+  .catalog-sidebar-sort-button svg {
+    transition: transform 0.24s ease;
+  }
+
+  .catalog-reset-button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(233, 60, 96, 0.42);
+    background: #fff4f7;
+    color: var(--color-primary);
+    box-shadow: 0 12px 24px rgba(233, 60, 96, 0.1);
+  }
+
+  .catalog-sidebar-sort-button:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(233, 60, 96, 0.16);
+  }
+
+  .catalog-sidebar-sort-button:hover svg {
+    transform: translateY(-1px);
   }
 
   .catalog-toolbar {

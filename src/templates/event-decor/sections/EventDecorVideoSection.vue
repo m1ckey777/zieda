@@ -70,7 +70,7 @@ const toggleVideo = async () => {
     class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[48px] pb-[88px] max-[768px]:w-[calc(100%-32px)] max-[768px]:pt-[40px] max-[768px]:pb-[48px]"
   >
     <div class="grid items-start gap-x-[48px] gap-y-[28px] min-[901px]:grid-cols-[360px_minmax(0,1fr)] max-[900px]:grid-cols-1">
-      <div>
+      <div v-reveal>
         <p class="m-0 mb-[5px] font-[var(--font-display)] text-[13px] font-normal uppercase leading-[20px] tracking-[-0.7px] text-[#22112E] max-[768px]:mb-0 max-[768px]:text-[16px] max-[768px]:leading-[20px] max-[768px]:tracking-[-0.32px]">
           {{ t.eventDecor.video.eyebrow }}
         </p>
@@ -85,6 +85,7 @@ const toggleVideo = async () => {
       </div>
 
       <div
+        v-reveal="{ delay: 120, variant: 'scale' }"
         class="group relative overflow-hidden rounded-[20px] max-[768px]:rounded-[20px]"
         @mouseenter="isVideoHovered = true"
         @mouseleave="isVideoHovered = false"
@@ -92,7 +93,7 @@ const toggleVideo = async () => {
         <video
           ref="videoRef"
           :src="videoUrl"
-          class="block h-[464px] w-full object-cover max-[768px]:h-[308px]"
+          class="block h-[464px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.015] max-[768px]:h-[308px]"
           muted
           loop
           preload="metadata"
@@ -106,7 +107,7 @@ const toggleVideo = async () => {
         <button
           type="button"
           @click="toggleVideo"
-          class="absolute left-1/2 top-1/2 inline-flex h-[125px] w-[125px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] max-[768px]:h-[78px] max-[768px]:w-[78px]"
+          class="absolute left-1/2 top-1/2 inline-flex h-[125px] w-[125px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/55 backdrop-blur-sm transition-all duration-300 hover:scale-[1.05] hover:bg-white/70 max-[768px]:h-[78px] max-[768px]:w-[78px]"
           :class="isVideoControlVisible ? 'opacity-100' : 'pointer-events-none opacity-0'"
           :aria-label="isVideoPaused ? t.eventDecor.video.playAria : t.eventDecor.video.pauseAria"
         >

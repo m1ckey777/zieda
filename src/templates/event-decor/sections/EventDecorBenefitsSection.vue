@@ -11,6 +11,7 @@ const { t } = useLanguage()
     class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[44px] pb-[70px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pb-[38px]"
   >
     <div class="w-full">
+      <div v-reveal>
       <h2 class="m-0 mb-[21px] w-full [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[1024px]:text-[40px] max-[1024px]:leading-[48px] max-[768px]:text-[36px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
         {{ t.eventDecor.benefits.title }}
       </h2>
@@ -24,12 +25,14 @@ const { t } = useLanguage()
           {{ paragraph }}
         </p>
       </div>
+      </div>
 
       <div class="mt-[46px] grid grid-cols-3 gap-x-[44px] gap-y-[34px] max-[1024px]:grid-cols-2 max-[1024px]:gap-x-8 max-[1024px]:gap-y-7 max-[768px]:mt-[32px] max-[768px]:grid-cols-1 max-[768px]:gap-y-6">
         <article
-          v-for="item in t.eventDecor.benefits.items"
+          v-for="(item, index) in t.eventDecor.benefits.items"
           :key="item.title"
-          class="flex items-start gap-2"
+          v-reveal="{ delay: (index % 6) * 60 }"
+          class="motion-card flex items-start gap-2"
         >
           <img
             :src="starsIconUrl"

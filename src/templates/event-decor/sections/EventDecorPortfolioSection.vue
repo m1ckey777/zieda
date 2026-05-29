@@ -79,6 +79,7 @@ const endPortfolioDrag = (event) => {
     class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[20px] pb-[70px] max-[768px]:w-[calc(100%-32px)] max-[768px]:pt-[38px] max-[768px]:pb-[40px]"
   >
     <div class="w-full">
+      <div v-reveal>
       <h2 class="m-0 [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[1024px]:text-[40px] max-[1024px]:leading-[48px] max-[768px]:max-w-full max-[768px]:text-[36px] max-[768px]:leading-[40px]">
         {{ t.eventDecor.portfolio.title }}
       </h2>
@@ -86,8 +87,9 @@ const endPortfolioDrag = (event) => {
       <p class="m-0 mt-[13px] max-w-[980px] font-[var(--font-sans)] text-[16px] font-normal leading-[27px] tracking-[-0.28px] text-[#51465A] max-[768px]:mt-3 max-[768px]:max-w-full max-[768px]:text-[14px] max-[768px]:leading-[24px]">
         {{ t.eventDecor.portfolio.text }}
       </p>
+      </div>
 
-      <div class="mt-[38px] max-[768px]:mt-[28px]">
+      <div v-reveal="{ delay: 100, variant: 'scale' }" class="mt-[38px] max-[768px]:mt-[28px]">
         <div
           ref="portfolioSliderRef"
           class="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [touch-action:pan-y] [&::-webkit-scrollbar]:hidden max-[768px]:gap-4 max-[768px]:pb-0 max-[768px]:pr-4"
@@ -101,13 +103,13 @@ const endPortfolioDrag = (event) => {
           <article
             v-for="item in portfolioItems"
             :key="item.image"
-            class="h-[420px] w-[315px] shrink-0 snap-start overflow-hidden rounded-[12px] bg-[#F5EFE8] max-[768px]:h-[420px] max-[768px]:w-[315px] max-[560px]:w-[315px]"
+            class="motion-image-wrap h-[420px] w-[315px] shrink-0 snap-start overflow-hidden rounded-[12px] bg-[#F5EFE8] max-[768px]:h-[420px] max-[768px]:w-[315px] max-[560px]:w-[315px]"
           >
             <img
               :src="item.image"
               :alt="item.alt"
               draggable="false"
-              class="block h-full w-full object-cover pointer-events-none select-none"
+              class="motion-image block h-full w-full object-cover pointer-events-none select-none"
             />
           </article>
         </div>

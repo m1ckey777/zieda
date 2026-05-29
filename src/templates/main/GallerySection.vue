@@ -32,7 +32,7 @@ const closeGalleryImage = () => {
 
 <template>
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[50px] max-[768px]:pb-[65px]">
-    <div class="max-w-[920px]">
+    <div v-reveal class="max-w-[920px]">
       <h2 class="m-0 text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)] max-[768px]:mb-[7px] max-[768px]:text-[32px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
         {{ t.home.gallery.title }}
       </h2>
@@ -47,7 +47,8 @@ const closeGalleryImage = () => {
         v-for="(item, index) in galleryItems"
         :key="item.image"
         :class="!item.showOnMobile ? 'max-[768px]:hidden' : ''"
-        class="overflow-hidden rounded-[4px] bg-[#d9d9d9]"
+        v-reveal="{ delay: (index % 8) * 45, variant: 'scale' }"
+        class="motion-image-wrap overflow-hidden rounded-[4px] bg-[#d9d9d9]"
       >
         <button
           type="button"
@@ -58,7 +59,7 @@ const closeGalleryImage = () => {
           <img
             :src="item.image"
             :alt="`${t.home.gallery.imageAlt} ${index + 1}`"
-            class="block aspect-square w-full object-cover"
+            class="motion-image block aspect-square w-full object-cover"
             loading="lazy"
           />
         </button>
@@ -68,7 +69,7 @@ const closeGalleryImage = () => {
     <div class="mt-10 flex justify-center max-[768px]:mt-[30px]">
       <a
         href="/portfolio"
-        class="inline-flex min-h-[54px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-[var(--color-primary)] px-[48px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-white transition duration-200 hover:bg-[var(--color-primary-dark)] hover:border-[var(--color-primary-dark)] max-[768px]:w-full max-[768px]:px-8"
+        class="motion-button inline-flex min-h-[54px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-[var(--color-primary)] px-[48px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-white transition duration-200 hover:bg-[var(--color-primary-dark)] hover:border-[var(--color-primary-dark)] max-[768px]:w-full max-[768px]:px-8"
       >
         {{ t.home.gallery.cta }}
       </a>
@@ -77,7 +78,7 @@ const closeGalleryImage = () => {
 
   <div
     v-if="selectedGalleryImage"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 max-[768px]:p-4"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm max-[768px]:p-4"
     @click="closeGalleryImage"
   >
     <button

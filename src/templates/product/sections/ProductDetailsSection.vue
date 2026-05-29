@@ -31,6 +31,7 @@ const productColorOptions = [
 ]
 
 const currentSlideIndex = ref(0)
+const selectedColorKey = ref('blue')
 const activeGallery = computed(() =>
   t.value.product.imageAlts.map((alt) => ({
     image: productImageUrl,
@@ -66,7 +67,7 @@ const selectColor = (colorKey) => {
 <template>
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[64px] pb-[150px] max-[768px]:w-full max-[768px]:px-[22px] max-[768px]:pt-[34px] max-[768px]:pb-[80px]">
     <div class="grid items-start gap-[36px] min-[1100px]:grid-cols-[minmax(0,780px)_390px] max-[1099px]:gap-[40px]">
-      <div>
+      <div v-reveal>
         <div class="max-[768px]:mb-[12px]">
           <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
             {{ t.product.category }}
@@ -81,7 +82,7 @@ const selectColor = (colorKey) => {
           </p>
         </div>
 
-        <div class="relative mt-8 overflow-hidden rounded-[18px] bg-[#ebe3dc] max-[768px]:mt-0 max-[768px]:rounded-[18px]">
+        <div v-reveal="{ delay: 100, variant: 'image' }" class="motion-image-wrap relative mt-8 overflow-hidden rounded-[18px] bg-[#ebe3dc] max-[768px]:mt-0 max-[768px]:rounded-[18px]">
           <div class="absolute left-[22px] top-[22px] z-10 rounded-[4px] bg-[#2E1742] px-[14px] py-[10px] [font-family:var(--font-display)] text-[16px] font-normal uppercase leading-[18px] tracking-[-0.32px] text-white max-[768px]:left-4 max-[768px]:top-4 max-[768px]:px-[12px] max-[768px]:py-[8px] max-[768px]:text-[13px]">
             {{ t.product.badge }}
           </div>
@@ -89,12 +90,12 @@ const selectColor = (colorKey) => {
           <img
             :src="activeGallery[currentSlideIndex].image"
             :alt="activeGallery[currentSlideIndex].alt"
-            class="block aspect-[1/1.05] w-full object-cover max-[768px]:aspect-[1/1.2]"
+            class="motion-image block aspect-[1/1.05] w-full object-cover max-[768px]:aspect-[1/1.2]"
           />
 
           <button
             type="button"
-            class="absolute left-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:bg-white/50 max-[768px]:left-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
+            class="absolute left-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:scale-105 hover:bg-white/55 max-[768px]:left-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
             :aria-label="t.product.previousImage"
             @click="goToPreviousSlide"
           >
@@ -103,7 +104,7 @@ const selectColor = (colorKey) => {
 
           <button
             type="button"
-            class="absolute right-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:bg-white/50 max-[768px]:right-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
+            class="absolute right-5 top-1/2 inline-flex h-[58px] w-[58px] -translate-y-1/2 items-center justify-center rounded-full bg-white/35 backdrop-blur-sm transition duration-200 hover:scale-105 hover:bg-white/55 max-[768px]:right-3 max-[768px]:h-[44px] max-[768px]:w-[44px]"
             :aria-label="t.product.nextImage"
             @click="goToNextSlide"
           >
@@ -116,7 +117,7 @@ const selectColor = (colorKey) => {
             v-for="(item, index) in activeGallery"
             :key="`gallery-${index}`"
             type="button"
-            class="overflow-hidden rounded-[12px] border-2 transition duration-200"
+            class="motion-image-wrap overflow-hidden rounded-[12px] border-2 transition duration-200"
             :class="currentSlideIndex === index ? 'border-[var(--color-primary)] shadow-[0_12px_24px_rgba(233,60,96,0.18)]' : 'border-transparent hover:border-[rgba(233,60,96,0.35)]'"
             :aria-label="`${t.product.showImage} ${index + 1}`"
             @click="goToSlide(index)"
@@ -124,13 +125,13 @@ const selectColor = (colorKey) => {
             <img
               :src="item.image"
               :alt="item.alt"
-              class="block aspect-square w-full object-cover"
+              class="motion-image block aspect-square w-full object-cover"
             />
           </button>
         </div>
       </div>
 
-      <div class="min-[1100px]:pt-[8px]">
+      <div v-reveal="{ delay: 160 }" class="min-[1100px]:pt-[8px]">
         <div class="mt-8 max-[768px]:mt-0">
           <h2 class="m-0 max-w-[430px] text-[32px] font-normal leading-[40px] tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)] max-[768px]:max-w-full max-[768px]:text-[24px] max-[768px]:leading-[32px]">
             {{ t.product.recommendedTitle }}
@@ -161,8 +162,9 @@ const selectColor = (colorKey) => {
 
           <div class="mt-6 flex flex-wrap gap-x-8 gap-y-4 max-[768px]:mt-5 max-[768px]:gap-x-5 max-[768px]:gap-y-4">
             <div
-              v-for="option in colorOptions"
+              v-for="(option, index) in colorOptions"
               :key="option.key"
+              v-reveal="{ delay: index * 70, variant: 'scale' }"
               class="inline-flex items-center gap-3 text-left"
             >
               <span
@@ -179,7 +181,7 @@ const selectColor = (colorKey) => {
       </div>
     </div>
 
-    <div class="mt-12 rounded-[40px] border-[4px] max-w-[910px] border-white bg-[#22112E] px-[22px] py-[24px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mt-10 max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
+    <div v-reveal="{ variant: 'scale' }" class="mt-12 rounded-[40px] border-[4px] max-w-[910px] border-white bg-[#22112E] px-[22px] py-[24px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mt-10 max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
       <div class="relative z-10 mb-[18px]">
         <h2 class="m-0 max-w-[760px] [font-family:var(--font-display)] text-[44px] font-normal leading-[48px] tracking-[-0.7px] text-white max-[768px]:max-w-[100%] max-[768px]:text-[32px] max-[768px]:leading-[36px]">
           {{ t.product.contact.title }}
@@ -196,7 +198,7 @@ const selectColor = (colorKey) => {
           <input
             type="text"
             :placeholder="t.product.contact.name"
-            class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
+            class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.2)] max-[768px]:h-[52px]"
           />
         </label>
 
@@ -205,14 +207,14 @@ const selectColor = (colorKey) => {
           <input
             type="tel"
             placeholder="+371 00 000 000"
-            class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
+            class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.2)] max-[768px]:h-[52px]"
           />
         </label>
       </div>
 
       <button
         type="button"
-        class="mt-8 inline-flex min-h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:min-h-[52px]"
+        class="motion-button mt-8 inline-flex min-h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:min-h-[52px]"
       >
         {{ t.product.contact.submit }}
       </button>

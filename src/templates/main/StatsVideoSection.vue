@@ -66,13 +66,13 @@ const toggleDecorVideo = async () => {
 
 <template>
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pb-16">
-    <div class="rounded-[40px] bg-white px-[68px] py-[70px] shadow-[0_22px_60px_rgba(34,17,46,0.08)] max-[768px]:rounded-[28px] max-[768px]:px-6 max-[768px]:pt-[30px] max-[768px]:pb-[24px]">
+    <div v-reveal="{ variant: 'scale' }" class="rounded-[40px] bg-white px-[68px] py-[70px] shadow-[0_22px_60px_rgba(34,17,46,0.08)] max-[768px]:rounded-[28px] max-[768px]:px-6 max-[768px]:pt-[30px] max-[768px]:pb-[24px]">
       <h2 class="m-0 text-center [font-family:var(--font-display)] text-[40px] font-normal leading-[48px] tracking-[-0.7px] text-[#22112E] max-[768px]:text-[32px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
         {{ t.home.stats.title }}
       </h2>
 
       <div class="mt-12 grid grid-cols-3 gap-8 max-[768px]:mt-[30px] max-[768px]:grid-cols-1 max-[768px]:gap-[24px]">
-        <article v-for="item in t.home.stats.items" :key="item.label" class="text-center">
+        <article v-for="(item, index) in t.home.stats.items" :key="item.label" v-reveal="{ delay: index * 80 }" class="text-center">
           <p class="m-0 text-center [font-family:var(--font-accent)] text-[62px] font-normal leading-[74.4px] tracking-[-1.5px] text-[#4D286C]">
             {{ item.value }}<span>{{ item.suffix }}</span>
           </p>
@@ -94,7 +94,7 @@ const toggleDecorVideo = async () => {
         <video
           ref="decorVideoRef"
           :src="decorShowcaseVideoUrl"
-          class="block h-[371px] w-full object-cover max-[768px]:h-[220px]"
+          class="block h-[371px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.015] max-[768px]:h-[220px]"
           loop
           muted
           preload="metadata"
@@ -112,7 +112,7 @@ const toggleDecorVideo = async () => {
           @click="toggleDecorVideo"
           :aria-label="isDecorVideoPaused ? t.home.stats.videoPlayAria : t.home.stats.videoPauseAria"
         >
-          <span class="inline-flex h-[63px] w-[63px] shrink-0 items-center justify-center rounded-[63px] bg-white pl-[3px]">
+          <span class="inline-flex h-[63px] w-[63px] shrink-0 items-center justify-center rounded-[63px] bg-white pl-[3px] transition-transform duration-300 hover:scale-105">
             <img
               :src="isDecorVideoPaused ? playIconUrl : pauseIconUrl"
               alt=""

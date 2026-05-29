@@ -41,7 +41,7 @@ const endTestimonialsDrag = () => {
 
 <template>
   <section id="testimonials" class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[15px] max-[768px]:pb-16">
-    <div class="max-w-[760px]">
+    <div v-reveal class="max-w-[760px]">
       <h2 class="m-0 [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[768px]:mb-[7px] max-[768px]:text-[32px] max-[768px]:leading-[40px]">
         {{ t.home.testimonials.title }}
       </h2>
@@ -69,7 +69,8 @@ const endTestimonialsDrag = () => {
       <article
         v-for="(item, index) in testimonialItems"
         :key="`${item.author}-${index}`"
-        class="flex min-h-[536px] w-[calc((100%-64px)/3)] min-w-[calc((100%-64px)/3)] snap-start flex-col rounded-[8px_8px_8px_48px] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.10)] max-[1199px]:w-[360px] max-[1199px]:min-w-[360px] max-[980px]:w-[320px] max-[980px]:min-w-[320px] max-[768px]:min-h-[auto] max-[768px]:w-[88%] max-[768px]:min-w-[88%] max-[768px]:p-[23px]"
+        v-reveal="{ delay: (index % 3) * 80, variant: 'scale' }"
+        class="motion-card flex min-h-[536px] w-[calc((100%-64px)/3)] min-w-[calc((100%-64px)/3)] snap-start flex-col rounded-[8px_8px_8px_48px] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.10)] max-[1199px]:w-[360px] max-[1199px]:min-w-[360px] max-[980px]:w-[320px] max-[980px]:min-w-[320px] max-[768px]:min-h-[auto] max-[768px]:w-[88%] max-[768px]:min-w-[88%] max-[768px]:p-[23px]"
       >
         <img :src="blockquoteIconUrl" alt="" class="block h-[47px] w-[52px]" />
 
@@ -99,7 +100,7 @@ const endTestimonialsDrag = () => {
     <div class="mt-10 flex justify-center max-[768px]:mt-[25px]">
       <a
         href="#contact"
-        class="inline-flex min-h-[62px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-white px-[36px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:w-full max-[768px]:max-w-[300px] max-[768px]:px-[24px] max-[768px]:py-[17px] max-[768px]:text-[13px] max-[768px]:leading-[22px] max-[768px]:tracking-[-0.26px]"
+        class="motion-button inline-flex min-h-[62px] items-center justify-center rounded-[555px] border-2 border-[var(--color-primary)] bg-white px-[36px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:w-full max-[768px]:max-w-[300px] max-[768px]:px-[24px] max-[768px]:py-[17px] max-[768px]:text-[13px] max-[768px]:leading-[22px] max-[768px]:tracking-[-0.26px]"
       >
         {{ t.home.testimonials.cta }}
       </a>

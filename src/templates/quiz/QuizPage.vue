@@ -363,27 +363,28 @@ onBeforeUnmount(() => {
     <SiteHeader />
 
     <main>
-      <section v-if="phase === 'form'" class="quiz-start quiz-intro">
+      <section v-if="phase === 'form'" v-reveal="{ variant: 'fade', threshold: 0.05 }" class="quiz-start quiz-intro">
         <img :src="decorHeroUrl" alt="" class="quiz-start-decor" />
-        <div class="quiz-start-content">
+        <div v-reveal="{ delay: 80 }" class="quiz-start-content">
           <p>{{ t.quiz.introBadge }}</p>
           <h1>{{ t.quiz.introTitle }}</h1>
           <button type="button" @click="scrollToQuiz">{{ t.quiz.start }}</button>
         </div>
       </section>
 
-      <section v-if="phase === 'form'" class="quiz-form-card">
-        <div class="quiz-step">
+      <section v-if="phase === 'form'" v-reveal="{ variant: 'scale' }" class="quiz-form-card">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>1</span>
             <h2>{{ t.quiz.steps.eventType }}</h2>
           </div>
           <div class="quiz-image-grid">
             <button
-              v-for="item in eventTypes"
-              :key="item.value"
-              type="button"
-              class="quiz-image-option"
+            v-for="(item, index) in eventTypes"
+            :key="item.value"
+            type="button"
+            class="quiz-image-option"
+            v-reveal="{ delay: (index % 6) * 45, variant: 'scale' }"
               :class="{ 'is-selected': answers.eventType === item.value }"
               @click="answers.eventType = item.value"
             >
@@ -396,7 +397,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>2</span>
             <h2>{{ t.quiz.steps.venue }}</h2>
@@ -419,7 +420,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>3</span>
             <h2>{{ t.quiz.steps.guests }}</h2>
@@ -437,7 +438,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>4</span>
             <h2>{{ t.quiz.steps.decorate }}</h2>
@@ -459,7 +460,7 @@ onBeforeUnmount(() => {
           <input v-model="answers.decorateOther" class="quiz-text-input" type="text" :placeholder="t.quiz.otherPlaceholder" />
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>5</span>
             <h2>{{ t.quiz.steps.style }}</h2>
@@ -489,7 +490,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>6</span>
             <h2>{{ t.quiz.steps.palette }}</h2>
@@ -510,17 +511,18 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>7</span>
             <h2>{{ t.quiz.steps.flowers }}</h2>
           </div>
           <div class="quiz-image-grid quiz-image-grid-compact">
             <button
-              v-for="item in flowerTypeOptions"
-              :key="item.value"
-              type="button"
-              class="quiz-image-option"
+            v-for="(item, index) in flowerTypeOptions"
+            :key="item.value"
+            type="button"
+            class="quiz-image-option"
+            v-reveal="{ delay: index * 60, variant: 'scale' }"
               :class="{ 'is-selected': answers.flowerType === item.value }"
               @click="answers.flowerType = item.value"
             >
@@ -532,7 +534,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>8</span>
             <h2>{{ t.quiz.steps.services }}</h2>
@@ -561,7 +563,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>9</span>
             <h2>{{ t.quiz.steps.budget }}</h2>
@@ -579,7 +581,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <div class="quiz-step">
+        <div v-reveal class="quiz-step">
           <div class="quiz-step-title">
             <span>10</span>
             <h2>{{ t.quiz.steps.restrictions }}</h2>
@@ -594,7 +596,7 @@ onBeforeUnmount(() => {
           </label>
         </div>
 
-        <div class="quiz-step quiz-step-last">
+        <div v-reveal class="quiz-step quiz-step-last">
           <div class="quiz-step-title">
             <span>11</span>
             <h2>{{ t.quiz.steps.contacts }}</h2>
@@ -620,8 +622,8 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section v-else class="quiz-result">
-        <div class="quiz-result-summary">
+      <section v-else v-reveal="{ variant: 'fade', threshold: 0.05 }" class="quiz-result">
+        <div v-reveal class="quiz-result-summary">
           <p>{{ t.quiz.resultTitle }}</p>
           <h1>{{ formatCurrency(estimate[0]) }} — {{ formatCurrency(estimate[1]) }}</h1>
           <dl>
@@ -633,7 +635,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="quiz-package-row">
-          <article v-for="item in packages" :key="item.name" class="quiz-package">
+          <article v-for="(item, index) in packages" :key="item.name" v-reveal="{ delay: index * 80, variant: 'scale' }" class="quiz-package">
             <p>{{ t.quiz.packageLabel }}</p>
             <div>
               <h2>{{ item.name }}</h2>
@@ -727,6 +729,10 @@ onBeforeUnmount(() => {
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    background-color 0.24s ease;
 }
 
 .quiz-start-content button {
@@ -796,6 +802,7 @@ onBeforeUnmount(() => {
   border: 0;
   background: transparent;
   text-align: left;
+  transition: transform 0.24s ease;
 }
 
 .quiz-image-wrap {
@@ -804,6 +811,9 @@ onBeforeUnmount(() => {
   overflow: hidden;
   border: 2px solid transparent;
   border-radius: 4px;
+  transition:
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .quiz-image-option.is-selected .quiz-image-wrap {
@@ -815,6 +825,7 @@ onBeforeUnmount(() => {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .quiz-check-icon {
@@ -848,6 +859,10 @@ onBeforeUnmount(() => {
   font-family: var(--font-sans);
   font-size: 12px;
   outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .quiz-date-field,
@@ -894,6 +909,11 @@ onBeforeUnmount(() => {
   background: #f6f6f6;
   color: #645d67;
   font-size: 12px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .quiz-button-grid button.is-selected,
@@ -977,6 +997,10 @@ onBeforeUnmount(() => {
   background: #fff;
   color: #8b8092;
   font-size: 11px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .quiz-scale button.is-selected {
@@ -1141,6 +1165,9 @@ onBeforeUnmount(() => {
 .quiz-package {
   min-width: 310px;
   padding: 24px 20px;
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
 }
 
 .quiz-package p:first-child {
@@ -1234,6 +1261,57 @@ onBeforeUnmount(() => {
     background: #e93c60;
     opacity: 0;
     visibility: hidden;
+    transition:
+      opacity 0.24s ease,
+      visibility 0.24s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quiz-start-content button:hover,
+  .quiz-submit-button:hover,
+  .quiz-result-actions a:hover,
+  .quiz-result-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(233, 60, 96, 0.2);
+  }
+
+  .quiz-image-option:hover,
+  .quiz-placeholder-grid button:hover {
+    transform: translateY(-3px);
+  }
+
+  .quiz-image-option:hover .quiz-image-wrap {
+    border-color: rgba(233, 60, 96, 0.35);
+    box-shadow: 0 14px 28px rgba(34, 17, 46, 0.12);
+  }
+
+  .quiz-image-option:hover .quiz-image-wrap > img:first-child {
+    transform: scale(1.045);
+  }
+
+  .quiz-button-grid button:hover,
+  .quiz-stack-buttons button:hover,
+  .quiz-palette-list button:hover,
+  .quiz-segmented button:hover,
+  .quiz-scale button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(233, 60, 96, 0.42);
+    background: #fff;
+  }
+
+  .quiz-date-field input:focus,
+  .quiz-text-input:focus,
+  .quiz-contact-fields input:focus,
+  .quiz-textarea-label textarea:focus {
+    border-color: rgba(233, 60, 96, 0.5);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(233, 60, 96, 0.08);
+  }
+
+  .quiz-package:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 22px 46px rgba(34, 17, 46, 0.12);
+  }
 }
 
 @media (min-width: 900px) {

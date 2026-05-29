@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[80px] pb-[110px] max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:pt-[45px] max-[768px]:pb-[65px]">
-    <div class="max-w-[760px] max-[768px]:mx-auto max-[768px]:text-center">
+    <div v-reveal class="max-w-[760px] max-[768px]:mx-auto max-[768px]:text-center">
       <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
         {{ t.portfolio.eyebrow }}
       </p>
@@ -110,14 +110,14 @@ onBeforeUnmount(() => {
       </p>
     </div>
 
-    <div class="mt-10 flex flex-wrap gap-3 max-[768px]:mt-8 max-[768px]:flex-nowrap max-[768px]:overflow-x-auto max-[768px]:pb-3">
+    <div v-reveal="{ delay: 80 }" class="mt-10 flex flex-wrap gap-3 max-[768px]:mt-8 max-[768px]:flex-nowrap max-[768px]:overflow-x-auto max-[768px]:pb-3">
       <button
         v-for="option in t.portfolio.filters"
         :key="option.key"
         type="button"
         :data-filter="option.key"
-        class="inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[#E93C60] bg-white px-[26px] text-center text-[13px] font-normal uppercase leading-[22px] tracking-[-0.26px] text-[#E93C60] transition duration-200 [font-family:var(--font-display)] max-[768px]:shrink-0"
-        :class="activeFilter === option.key ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white' : 'hover:bg-[#fff4f7]'"
+        class="motion-button inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[#E93C60] bg-white px-[26px] text-center text-[13px] font-normal uppercase leading-[22px] tracking-[-0.26px] text-[#E93C60] transition duration-200 [font-family:var(--font-display)] max-[768px]:shrink-0"
+        :class="activeFilter === option.key ? 'border-[var(--color-primary)] bg-[var(--color-primary)] color-[var(--color-primary)] ' : 'hover:bg-[#fff4f7]'"
         @click="setFilter(option.key)"
       >
         {{ option.label }}
@@ -129,7 +129,8 @@ onBeforeUnmount(() => {
         v-for="(item, index) in visibleItems"
         :key="item.id"
         :data-categories="item.categories.join(' ')"
-        class="overflow-hidden rounded-[4px] bg-[#d9d9d9]"
+        v-reveal="{ delay: (index % 8) * 45, variant: 'scale' }"
+        class="motion-image-wrap overflow-hidden rounded-[4px] bg-[#d9d9d9]"
       >
         <button
           type="button"
@@ -140,7 +141,7 @@ onBeforeUnmount(() => {
           <img
             :src="item.image"
             :alt="item.alt"
-            class="block aspect-square w-full object-cover"
+            class="motion-image block aspect-square w-full object-cover"
             loading="lazy"
           />
         </button>
@@ -150,7 +151,7 @@ onBeforeUnmount(() => {
     <div v-if="hasMoreItems" class="mt-10 flex justify-center max-[768px]:mt-[30px]">
       <button
         type="button"
-        class="inline-flex min-h-[54px] items-center justify-center rounded-[555px] border border-[#22112E] bg-transparent px-[38px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] max-[768px]:w-full"
+        class="motion-button inline-flex min-h-[54px] items-center justify-center rounded-[555px] border border-[#22112E] bg-transparent px-[38px] [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[#22112E] transition duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] max-[768px]:w-full"
         @click="showMoreItems"
       >
         {{ t.portfolio.showMore }}
@@ -160,7 +161,7 @@ onBeforeUnmount(() => {
 
   <div
     v-if="selectedGalleryImage"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 max-[768px]:p-4"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm max-[768px]:p-4"
     @click="closeGalleryImage"
   >
     <button

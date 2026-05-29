@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
               v-for="item in desktopNavItems"
               :key="item.label"
               :href="item.href"
-              class="text-[14px] leading-[21px] text-[#333] transition-colors duration-200 hover:text-[var(--color-primary)]"
+              class="motion-link text-[14px] leading-[21px] text-[#333] transition-colors duration-200 hover:text-[var(--color-primary)]"
             >
               {{ item.label }}
             </a>
@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
           <div class="flex items-center gap-[18px] max-[768px]:gap-4">
             <div ref="languageMenuRef" class="relative max-[768px]:hidden">
               <button
-                class="flex min-h-[42px] min-w-[72px] items-center justify-center gap-2 rounded-full px-4 font-[var(--font-display)] text-[15px] text-[var(--color-heading)] transition-colors duration-200  "
+                class="flex min-h-[42px] min-w-[72px] items-center justify-center gap-2 rounded-full px-4 font-[var(--font-display)] text-[15px] text-[var(--color-heading)] transition-colors duration-200 hover:text-[var(--color-primary)]"
                 type="button"
                 aria-haspopup="true"
                 :aria-expanded="isLanguageMenuOpen"
@@ -170,7 +170,7 @@ onBeforeUnmount(() => {
             </div>
 
             <button
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-primary)] text-white transition-colors duration-200 hover:bg-[var(--color-primary-dark)] min-[981px]:hidden"
+              class="motion-button flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-primary)] text-white transition-colors duration-200 hover:bg-[var(--color-primary-dark)] min-[981px]:hidden"
               type="button"
               :aria-expanded="isMobileMenuOpen"
               aria-controls="mobile-site-menu"

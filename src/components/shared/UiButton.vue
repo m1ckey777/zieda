@@ -19,7 +19,7 @@ const props = defineProps({
 })
 
 const baseClasses =
-  'inline-flex min-h-[32px] items-center justify-center rounded-full border px-5 py-2 font-[var(--font-display)] text-[13px] uppercase leading-[22px] transition duration-200 hover:-translate-y-px'
+  'motion-button inline-flex min-h-[32px] items-center justify-center rounded-full border px-5 py-2 font-[var(--font-display)] text-[13px] uppercase leading-[22px] transition duration-200 hover:-translate-y-px'
 
 const variantClasses = {
   primary: 'border-transparent bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)]',

@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="mx-auto w-[min(1200px,calc(100%-40px))] pt-[80px] pb-[110px] max-[768px]:w-full max-[768px]:px-[15px] max-[768px]:pt-[38px] max-[768px]:pb-[45px]">
-    <div class="max-w-[680px] max-[768px]:max-w-none">
+    <div v-reveal class="max-w-[680px] max-[768px]:max-w-none">
       <p class="m-0 text-[13px] font-normal uppercase leading-5 tracking-[-0.7px] text-[#22112E] [font-family:var(--font-display)]">
         {{ t.contacts.eyebrow }}
       </p>
@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="mt-12 grid items-start gap-10 min-[1025px]:grid-cols-[1fr_430px] max-[1024px]:mt-10 max-[768px]:block">
-      <div class="order-2 max-[768px]:order-1">
+      <div v-reveal="{ delay: 100, variant: 'scale' }" class="order-2 max-[768px]:order-1">
         <div
           v-if="isSubmitted"
           class="rounded-[40px] border-[4px] border-white bg-[var(--color-primary)] px-[44px] py-[42px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:mb-[38px] max-[768px]:rounded-[40px] max-[768px]:px-[22px] max-[768px]:py-[30px]"
@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
 
           <button
             type="button"
-            class="mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
+            class="motion-button mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
             @click="resetForm"
           >
             {{ t.contacts.sendAgain }}
@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
                 type="text"
                 name="name"
                 :placeholder="t.contacts.name"
-                class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
+                class="h-[58px] w-full rounded-[555px] border-0 bg-white px-6 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.24)] max-[768px]:h-[52px]"
               />
             </label>
 
@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
               <select
                 v-model="city"
                 name="city"
-                class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
+                class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.24)] max-[768px]:h-[52px]"
               >
                 <option value="" disabled>{{ t.contacts.city }}</option>
                 <option v-for="option in cityOptions" :key="option" :value="option">{{ option }}</option>
@@ -166,7 +166,7 @@ onBeforeUnmount(() => {
               <select
                 v-model="service"
                 name="service"
-                class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
+                class="h-[58px] w-full appearance-none rounded-[555px] border-0 bg-white px-6 pr-12 text-[16px] leading-[22px] text-[#5b5b5b] outline-none transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.24)] max-[768px]:h-[52px]"
               >
                 <option value="" disabled>{{ t.contacts.service }}</option>
                 <option v-for="option in serviceOptions" :key="option" :value="option">{{ option }}</option>
@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
                 ref="phoneInputRef"
                 type="tel"
                 name="phone"
-                class="contact-phone-input h-[58px] w-full rounded-[555px] border-0 bg-white text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
+                class="contact-phone-input h-[58px] w-full rounded-[555px] border-0 bg-white text-[16px] leading-[22px] text-[#5b5b5b] outline-none transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.24)] max-[768px]:h-[52px]"
               />
             </label>
 
@@ -195,14 +195,14 @@ onBeforeUnmount(() => {
                 name="message"
                 :placeholder="t.contacts.message"
                 rows="6"
-                class="min-h-[208px] w-full resize-none rounded-[32px] border-0 bg-white px-6 py-5 text-[16px] leading-[24px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:min-h-[178px]"
+                class="min-h-[208px] w-full resize-none rounded-[32px] border-0 bg-white px-6 py-5 text-[16px] leading-[24px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.24)] max-[768px]:min-h-[178px]"
               />
             </label>
           </div>
 
           <button
             type="submit"
-            class="mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
+            class="motion-button mt-8 inline-flex h-[56px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-6 max-[768px]:h-[52px]"
           >
             {{ t.contacts.submit }}
           </button>
@@ -213,7 +213,7 @@ onBeforeUnmount(() => {
         </form>
       </div>
 
-      <aside class="order-1 rounded-[40px] border-[4px] border-white bg-[var(--color-footer)] px-[34px] py-[34px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:order-2 max-[768px]:mt-[38px] max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
+      <aside v-reveal="{ delay: 180, variant: 'scale' }" class="order-1 rounded-[40px] border-[4px] border-white bg-[var(--color-footer)] px-[34px] py-[34px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[768px]:order-2 max-[768px]:mt-[38px] max-[768px]:rounded-[40px] max-[768px]:px-[20px] max-[768px]:py-[22px]">
         <div class="space-y-8 max-[768px]:space-y-7">
           <div class="grid grid-cols-[72px_1fr] items-center gap-5 max-[768px]:grid-cols-[40px_1fr] max-[768px]:gap-4">
             <img :src="phoneIconUrl" alt="" class="w-[72px] max-[768px]:w-[40px]" />
@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
               :key="item.key"
               :href="item.href"
               :aria-label="item.label"
-              class="inline-flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[var(--color-footer)] transition duration-200 hover:scale-105 max-[768px]:h-[42px] max-[768px]:w-[42px]"
+              class="inline-flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[var(--color-footer)] transition duration-200 hover:scale-110 max-[768px]:h-[42px] max-[768px]:w-[42px]"
             >
               <img :src="item.icon" alt="" class="h-[24px] w-[24px] max-[768px]:h-[20px] max-[768px]:w-[20px]" />
             </a>

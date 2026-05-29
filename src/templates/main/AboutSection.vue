@@ -13,7 +13,7 @@ const aboutItems = computed(() => t.value.home.about.items.map((item, index) => 
 
 <template>
   <section id="about" class="mx-auto grid w-[min(1200px,calc(100%-40px))] items-center gap-10 py-[86px] min-[1025px]:grid-cols-[minmax(430px,573px)_minmax(0,1fr)] max-[1024px]:grid-cols-1 max-[768px]:w-[min(1200px,calc(100%-32px))] max-[768px]:gap-7 max-[768px]:pt-[50px] max-[768px]:pb-[30px]">
-    <div class="max-w-[573px]">
+    <div v-reveal class="max-w-[573px]">
       <h2 class="m-0 max-w-[573px] [font-family:var(--font-display)] text-[44px] font-normal leading-[52px] tracking-[-0.7px] text-[#22112E] max-[768px]:max-w-full max-[768px]:text-[32px] max-[768px]:leading-[40px] max-[768px]:tracking-[-0.7px]">
         {{ t.home.about.title }}
       </h2>
@@ -23,7 +23,7 @@ const aboutItems = computed(() => t.value.home.about.items.map((item, index) => 
       </p>
 
       <div class="mt-11 space-y-8 max-[768px]:mt-8 max-[768px]:space-y-6">
-        <article v-for="item in aboutItems" :key="item.title" class="flex items-start gap-5 max-[768px]:gap-5">
+        <article v-for="(item, index) in aboutItems" :key="item.title" v-reveal="{ delay: index * 80 }" class="flex items-start gap-5 max-[768px]:gap-5">
           <img :src="item.icon" :alt="item.title" class="mt-1 block h-[76px] w-[76px] shrink-0 max-[768px]:mt-0 max-[768px]:h-[76px] max-[768px]:w-[76px]" />
           <div class="max-w-[383px] max-[768px]:max-w-full">
             <h3 class="m-0 text-[16px] font-extrabold leading-[27px] text-[#322C36] max-[768px]:text-[16px] max-[768px]:leading-[27px]">
@@ -37,7 +37,7 @@ const aboutItems = computed(() => t.value.home.about.items.map((item, index) => 
       </div>
     </div>
 
-    <div class="flex items-center justify-end min-[1025px]:self-end max-[1024px]:justify-center max-[768px]:pt-1">
+    <div v-reveal="{ variant: 'image', delay: 120 }" class="flex items-center justify-end min-[1025px]:self-end max-[1024px]:justify-center max-[768px]:pt-1">
       <img
         :src="aboutImageUrl"
         :alt="t.home.about.imageAlt"

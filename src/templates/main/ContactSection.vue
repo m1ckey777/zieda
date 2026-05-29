@@ -64,6 +64,7 @@ const submitContactForm = () => {
 <template>
   <section
     id="contact"
+    v-reveal="{ variant: 'scale' }"
     class="mx-auto w-[min(1200px,calc(100%-40px))] pb-[110px] pt-[80px] max-[768px]:w-full max-[768px]:overflow-hidden max-[768px]:px-[5px] max-[768px]:pb-[55px]"
   >
     <div class="relative mx-auto max-w-[1121px] rounded-[52px] border-[5px] border-white bg-[var(--color-primary)] px-[66px] pt-[53px] pb-[36px] shadow-[0_24px_60px_rgba(34,17,46,0.12)] max-[1024px]:px-10 max-[1024px]:py-12 max-[768px]:ml-0 max-[768px]:w-full max-[768px]:rounded-none max-[768px]:border-0 max-[768px]:bg-transparent max-[768px]:px-0 max-[768px]:pt-0 max-[768px]:pb-0 max-[768px]:shadow-none">
@@ -119,7 +120,7 @@ const submitContactForm = () => {
                 type="text"
                 name="name"
                 :placeholder="t.home.contact.name"
-                class="h-[58px] w-full rounded-[555px] border-0 bg-white px-9 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] max-[768px]:h-[52px]"
+                class="h-[58px] w-full rounded-[555px] border-0 bg-white px-9 text-[16px] leading-[22px] text-[#5b5b5b] outline-none placeholder:text-[#8d8d8d] transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.28)] max-[768px]:h-[52px]"
               />
             </label>
 
@@ -129,14 +130,14 @@ const submitContactForm = () => {
                 ref="phoneInputRef"
                 type="tel"
                 name="phone"
-                class="contact-phone-input h-[58px] w-full rounded-[555px] border-0 bg-white text-[16px] leading-[22px] text-[#5b5b5b] outline-none max-[768px]:h-[52px]"
+                class="contact-phone-input h-[58px] w-full rounded-[555px] border-0 bg-white text-[16px] leading-[22px] text-[#5b5b5b] outline-none transition-shadow duration-200 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.28)] max-[768px]:h-[52px]"
               />
             </label>
           </div>
 
           <button
             type="submit"
-            class="mt-8 inline-flex h-[50px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-[20px] max-[768px]:h-[52px]"
+            class="motion-button mt-8 inline-flex h-[50px] w-full items-center justify-center rounded-[555px] bg-white px-8 [font-family:var(--font-display)] text-center text-[16px] font-normal uppercase leading-[22px] tracking-[-0.32px] text-[var(--color-primary)] transition duration-200 hover:bg-[#fff4f7] max-[768px]:mt-[20px] max-[768px]:h-[52px]"
           >
             {{ submitLabel }}
           </button>
